@@ -1,3 +1,4 @@
+
 # Boundary — Stage 7: Scorecards & Player Statistics
 
 Stage 7 builds report pages on top of the Stage 6 `matchScores/{matchId}` innings and delivery data.
@@ -60,3 +61,7 @@ firebase deploy --only hosting
 ## Public live scores
 
 The homepage now lists matches after the scorer starts the first innings. The scoring page publishes a curated, read-only document to `publicMatchScores/{matchId}`. Visitors can open `public-scorecard.html?matchId=...` without signing in. Publish the updated `firestore.rules` before testing. The public snapshot exposes match metadata, team/player display names, and scorecard data only; private club membership and management records remain behind the existing rules.
+=======
+# Boundary
+A full stack Cricket Scoring website
+>>>>>>> 0a2aeb6012f4b98b8dcaedf814391bd329219852
