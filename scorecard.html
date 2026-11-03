@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Match Scorecard | Boundary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .report-wrap {
+            max-width: 1120px;
+            margin: 28px auto;
+            padding: 0 22px
+        }
+
+        .report-hero {
+            background: #182c43;
+            color: #fff;
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 20px
+        }
+
+        .report-hero h1 {
+            font: 800 27px Manrope, sans-serif;
+            margin: 8px 0
+        }
+
+        .report-meta {
+            color: #c8d5e1;
+            font-size: 13px
+        }
+
+        .report-scoreline {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px
+        }
+
+        .report-team {
+            background: #ffffff12;
+            border: 1px solid #ffffff20;
+            border-radius: 12px;
+            padding: 14px 16px;
+            min-width: 180px
+        }
+
+        .report-team strong {
+            display: block;
+            font: 800 25px Manrope;
+            margin-top: 4px
+        }
+
+        .report-card {
+            background: #fff;
+            border: 1px solid #e1e8ef;
+            border-radius: 16px;
+            padding: 22px;
+            margin: 18px 0
+        }
+
+        .report-card h2 {
+            font: 700 18px Manrope;
+            margin: 0 0 14px
+        }
+
+        .report-card h3 {
+            font: 700 14px Manrope;
+            margin: 18px 0 8px
+        }
+
+        .report-table-wrap {
+            overflow-x: auto
+        }
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 540px;
+            font-size: 13px
+        }
+
+        .report-table th,
+        .report-table td {
+            padding: 10px 9px;
+            text-align: right;
+            border-bottom: 1px solid #edf1f5;
+            white-space: nowrap
+        }
+
+        .report-table th:first-child,
+        .report-table td:first-child {
+            text-align: left
+        }
+
+        .report-table th {
+            font-size: 10px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: #64748b;
+            background: #f8fafc
+        }
+
+        .report-table tfoot td {
+            font-weight: 800;
+            background: #f8fafc
+        }
+
+        .report-muted {
+            font-size: 12px;
+            color: #718096
+        }
+
+        .report-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px
+        }
+
+        .report-stat {
+            padding: 13px;
+            border-radius: 11px;
+            background: #f5f8fb
+        }
+
+        .report-stat small {
+            display: block;
+            color: #64748b;
+            font-size: 11px
+        }
+
+        .report-stat strong {
+            font: 800 20px Manrope
+        }
+
+        .report-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px
+        }
+
+        .report-chip {
+            background: #edf4f8;
+            color: #315b78;
+            border-radius: 9px;
+            padding: 8px 10px;
+            font-size: 12px
+        }
+
+        .report-alert {
+            padding: 13px;
+            border-radius: 10px;
+            background: #fff8e6;
+            color: #77551a;
+            margin-bottom: 14px
+        }
+
+        .report-actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap
+        }
+
+        .report-actions .btn {
+            cursor: pointer
+        }
+
+        .empty-report {
+            padding: 25px;
+            text-align: center;
+            color: #718096;
+            background: #f8fafc;
+            border-radius: 12px
+        }
+
+        @media(max-width:720px) {
+            .report-grid {
+                grid-template-columns: 1fr
+            }
+
+            .report-hero h1 {
+                font-size: 22px
+            }
+        }
+
+        @media print {
+            body {
+                background: #fff !important
+            }
+
+            .dash-topbar,
+            .report-actions,
+            .toast {
+                display: none !important
+            }
+
+            .report-wrap {
+                max-width: none;
+                margin: 0;
+                padding: 0
+            }
+
+            .report-hero {
+                background: #fff !important;
+                color: #111 !important;
+                border: 1px solid #bbb
+            }
+
+            .report-meta {
+                color: #444
+            }
+
+            .report-team {
+                border: 1px solid #bbb;
+                background: #fff
+            }
+
+            .report-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #bbb
+            }
+
+            .report-table th {
+                background: #eee !important
+            }
+        }
+    </style>
+</head>
+
+<body class="dashboard-body">
+    <header class="dash-topbar"><a class="brand" href="index.html"><span class="brand-mark">B</span> boundary<span
+                class="brand-dot">.</span></a>
+        <div class="dash-user"><a class="btn btn-ghost btn-small" id="backMatches" href="matches.html">← Match
+                Centre</a><button class="btn btn-primary btn-small" id="printBtn">Print scorecard</button><span
+                id="userEmail">Loading…</span><button class="btn btn-ghost btn-small" id="signOutBtn">Sign out</button>
+        </div>
+    </header>
+    <main class="report-wrap">
+        <div id="pageNotice" class="report-alert" role="status" hidden></div>
+        <section class="report-hero">
+            <div class="eyebrow"><span></span> MATCH REPORT</div>
+            <h1 id="matchTitle">Loading scorecard…</h1>
+            <div class="report-meta" id="matchMeta">Loading match details</div>
+            <div class="report-scoreline" id="headlineScores"></div>
+        </section>
+        <div id="inningsReports">
+            <div class="empty-report">Loading innings details…</div>
+        </div>
+        <section class="report-card">
+            <h2>Match player statistics</h2>
+            <div id="playerStats" class="report-table-wrap">
+                <p class="report-muted">Statistics will appear after scoring starts.</p>
+            </div>
+        </section>
+        <section class="report-card">
+            <h2>Match summary</h2>
+            <div id="matchSummary" class="report-grid">
+                <p class="report-muted">No score data yet.</p>
+            </div>
+        </section>
+        <div class="report-actions"><a class="btn btn-ghost" id="liveScoringLink" href="scoring.html">← Live
+                scoring</a><a class="btn btn-ghost" id="matchesLink" href="matches.html">Match centre</a><button
+                class="btn btn-primary" id="printBottom">Print / Save PDF</button></div>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="js/scorecard.js"></script>
+</body>
+
+</html>

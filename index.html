@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Boundary — cricket clubs and tournament management.">
+  <title>Boundary | Cricket Management</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">B</span> boundary<span class="brand-dot">.</span></a>
+    <nav><a href="#features">Features</a><a href="#how">How it works</a></nav>
+    <div class="top-actions">
+      <button class="btn btn-ghost" data-open-auth="login">Log in</button>
+      <button class="btn btn-primary" data-open-auth="register">Create account <span>↗</span></button>
+    </div>
+    <button class="mobile-menu" id="mobileMenu" aria-label="Toggle navigation">☰</button>
+  </header>
+
+  <main>
+    <section class="hero container">
+      <div class="hero-copy">
+        <div class="eyebrow"><span></span> BUILT FOR CRICKET COMMUNITIES</div>
+        <h1>Run your club.<br><em>Own the game.</em></h1>
+        <p>One place for cricket clubs and organizers to manage their teams, competitions and match days. Give every fan a reason to follow.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-large" data-open-auth="register">Get started <span>→</span></button>
+          <a class="btn btn-outline btn-large" href="#features">Explore the platform</a>
+        </div>
+        <div class="hero-note"><span class="status-pip"></span> A shared home for clubs, players and spectators</div>
+      </div>
+      <div class="hero-panel">
+        <div class="panel-top"><span>YOUR CRICKET HUB</span><span class="panel-live">● PLATFORM PREVIEW</span></div>
+        <div class="panel-score">
+          <div class="panel-label">SAMPLE MATCH · 15 OVERS</div>
+          <div class="score-line"><span class="team-badge">RC</span><div><strong>Riverside CC</strong><small>Batting</small></div><b>126/4</b></div>
+          <div class="score-line"><span class="team-badge muted-badge">MX</span><div><strong>Metro XI</strong><small>Yet to bat</small></div><b>—</b></div>
+          <div class="panel-foot"><span>15.2 overs</span><span>Illustrative data only</span></div>
+        </div>
+        <div class="panel-bottom"><div><b>01</b><span>Club workspace</span></div><div><b>02</b><span>Live match centre</span></div><div><b>03</b><span>Tournament tools</span></div></div>
+        <div class="decor-ball"></div>
+      </div>
+    </section>
+
+
+    <section class="section container" id="liveMatches">
+      <div class="section-heading live-heading">
+        <div class="eyebrow"><span></span> FOLLOW THE ACTION</div>
+        <h2>Live matches<span>.</span></h2>
+        <p>Follow public Boundary matches as the scorer updates the game.</p>
+      </div>
+      <div id="publicLiveList" class="public-live-grid" aria-live="polite">
+        <div class="public-live-empty">Loading live matches…</div>
+      </div>
+    </section>
+
+    <section class="trust-strip"><div class="container trust-inner"><span>MADE FOR EVERY LEVEL OF THE GAME</span><b>CLUBS</b><b>ORGANIZERS</b><b>PLAYERS</b><b>SUPPORTERS</b></div></section>
+
+    <section class="section container" id="features">
+      <div class="section-heading"><div class="eyebrow"><span></span> ONE PLATFORM, MANY POSSIBILITIES</div><h2>Everything around<br>your cricket club<span>.</span></h2></div>
+      <div class="feature-grid">
+        <article class="feature-card"><span class="feature-icon">♧</span><h3>Club workspace</h3><p>Keep your club identity, members and teams organized in one dedicated space.</p></article>
+        <article class="feature-card"><span class="feature-icon">▤</span><h3>Tournament management</h3><p>Set up competitions, invite teams and organize fixtures around your format.</p></article>
+        <article class="feature-card"><span class="feature-icon">◉</span><h3>Live scoring</h3><p>Score ball by ball and let spectators follow published matches as they happen.</p></article>
+      </div>
+    </section>
+
+    <section class="section how-section" id="how"><div class="container how-grid">
+      <div><div class="eyebrow"><span></span> GET YOUR CLUB STARTED</div><h2>Your game.<br>Your community.</h2><p>Create an account, set up a club workspace and invite the people who help run your cricket.</p><button class="btn btn-primary" data-open-auth="register">Create your account <span>→</span></button></div>
+      <div class="steps"><div><b>01</b><span><strong>Create your account</strong><small>Register securely with your email.</small></span></div><div><b>02</b><span><strong>Set up a club</strong><small>Add your club name and basic details.</small></span></div><div><b>03</b><span><strong>Build your cricket hub</strong><small>Manage members, teams and tournaments.</small></span></div></div>
+    </div></section>
+  </main>
+  <footer><div class="container footer-inner"><a class="brand" href="#"><span class="brand-mark">B</span> boundary<span class="brand-dot">.</span></a><span>© <span id="year"></span> Boundary · Development preview</span></div></footer>
+
+  <div class="modal-backdrop hidden" id="authModal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <div class="modal">
+      <button class="modal-close" id="closeAuth" aria-label="Close">×</button>
+      <div class="modal-brand"><span class="brand-mark">B</span></div>
+      <div class="eyebrow"><span></span> YOUR CRICKET COMMUNITY</div>
+      <h2 id="authTitle">Welcome back.</h2>
+      <p class="modal-intro" id="authIntro">Log in to continue to your workspace.</p>
+      <div class="auth-tabs"><button class="auth-tab active" data-auth-tab="login">Log in</button><button class="auth-tab" data-auth-tab="register">Create account</button></div>
+      <form id="authForm">
+        <div class="field" id="nameField"><label for="fullName">Full name</label><input id="fullName" name="fullName" autocomplete="name" placeholder="Your name"></div>
+        <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+        <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" minlength="6" autocomplete="current-password" placeholder="At least 6 characters" required></div>
+        <button class="btn btn-primary btn-submit" id="authSubmit" type="submit">Log in <span>→</span></button>
+        <p class="form-message" id="authMessage" role="status"></p>
+      </form>
+      <p class="terms-note">By continuing, you agree to use the platform responsibly.</p>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="js/app.js"></script>
+  <script type="module" src="js/public-live.js"></script>
+</body>
+</html>

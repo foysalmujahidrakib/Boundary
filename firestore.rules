@@ -1,0 +1,134 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function memberDoc(clubId) { return /databases/$(database)/documents/memberships/$(request.auth.uid + '_' + clubId); }
+    function isClubMember(clubId) {
+      return signedIn() && exists(memberDoc(clubId))
+        && get(memberDoc(clubId)).data.status == 'active';
+    }
+    function isClubAdmin(clubId) {
+      return isClubMember(clubId)
+        && get(memberDoc(clubId)).data.role in ['club_admin', 'club_owner'];
+    }
+    match /users/{userId} {
+      allow read: if signedIn() && request.auth.uid == userId;
+      allow create, update: if signedIn() && request.auth.uid == userId
+        && request.resource.data.keys().hasOnly(['displayName','email','updatedAt']);
+      allow delete: if false;
+    }
+    match /memberships/{membershipId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create: if signedIn()
+        && membershipId == request.auth.uid + '_' + request.resource.data.clubId
+        && request.resource.data.userId == request.auth.uid
+        && request.resource.data.role == 'club_admin'
+        && request.resource.data.status == 'active'
+        && existsAfter(/databases/$(database)/documents/clubs/$(request.resource.data.clubId))
+        && getAfter(/databases/$(database)/documents/clubs/$(request.resource.data.clubId)).data.ownerUid == request.auth.uid;
+      allow update, delete: if false;
+    }
+    match /clubs/{clubId} {
+      allow create: if signedIn() && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.name is string && request.resource.data.name.size() > 0;
+      allow read: if resource.data.visibility == 'public' || isClubMember(clubId);
+      allow update: if isClubAdmin(clubId)
+        && request.resource.data.ownerUid == resource.data.ownerUid;
+      allow delete: if false;
+    }
+    match /teams/{teamId} {
+      allow read: if isClubMember(resource.data.clubId);
+      allow create: if isClubAdmin(request.resource.data.clubId)
+        && request.resource.data.name is string && request.resource.data.name.size() > 0;
+      allow update: if isClubAdmin(resource.data.clubId)
+        && request.resource.data.clubId == resource.data.clubId;
+      allow delete: if isClubAdmin(resource.data.clubId);
+    }
+    match /players/{playerId} {
+      allow read: if isClubMember(resource.data.clubId);
+      allow create: if isClubAdmin(request.resource.data.clubId)
+        && request.resource.data.fullName is string && request.resource.data.fullName.size() > 0;
+      allow update: if isClubAdmin(resource.data.clubId)
+        && request.resource.data.clubId == resource.data.clubId;
+      allow delete: if isClubAdmin(resource.data.clubId);
+    }
+    match /tournaments/{tournamentId} {
+      allow read: if isClubMember(resource.data.clubId);
+      allow create: if isClubAdmin(request.resource.data.clubId)
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.teamIds is list
+        && request.resource.data.teamIds.size() >= 2
+        && request.resource.data.teamIds.size() <= 32
+        && request.resource.data.format in ['T10', 'T20', 'ODI', 'Other']
+        && request.resource.data.status in ['planned', 'ongoing', 'completed', 'cancelled'];
+      allow update: if isClubAdmin(resource.data.clubId)
+        && request.resource.data.clubId == resource.data.clubId
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.teamIds is list
+        && request.resource.data.teamIds.size() >= 2
+        && request.resource.data.teamIds.size() <= 32
+        && request.resource.data.format in ['T10', 'T20', 'ODI', 'Other']
+        && request.resource.data.status in ['planned', 'ongoing', 'completed', 'cancelled'];
+      allow delete: if isClubAdmin(resource.data.clubId);
+    }
+    match /matches/{matchId} {
+      allow read: if signedIn() && isClubMember(resource.data.clubId);
+      allow create: if signedIn() && isClubAdmin(request.resource.data.clubId)
+        && request.resource.data.clubId is string
+        && request.resource.data.teamAId is string
+        && request.resource.data.teamBId is string
+        && request.resource.data.teamAId != request.resource.data.teamBId
+        && request.resource.data.matchDate is string
+        && request.resource.data.status in ['scheduled', 'in_progress', 'completed', 'abandoned'];
+      allow update: if signedIn() && isClubAdmin(resource.data.clubId)
+        && request.resource.data.clubId == resource.data.clubId
+        && request.resource.data.teamAId != request.resource.data.teamBId;
+      allow delete: if signedIn() && isClubAdmin(resource.data.clubId);
+    }
+
+    match /matchScores/{matchId} {
+      function scoreMatchExists() {
+        return exists(/databases/$(database)/documents/matches/$(matchId));
+      }
+      function scoreClubId() {
+        return get(/databases/$(database)/documents/matches/$(matchId)).data.clubId;
+      }
+      allow read: if signedIn() && scoreMatchExists() && isClubMember(scoreClubId());
+      allow create: if signedIn() && scoreMatchExists()
+        && request.resource.data.matchId == matchId
+        && request.resource.data.clubId == scoreClubId()
+        && isClubAdmin(scoreClubId());
+      allow update: if signedIn() && scoreMatchExists()
+        && resource.data.clubId == scoreClubId()
+        && request.resource.data.clubId == resource.data.clubId
+        && request.resource.data.matchId == matchId
+        && isClubAdmin(scoreClubId());
+      allow delete: if signedIn() && scoreMatchExists() && isClubAdmin(scoreClubId());
+    }
+
+
+    // Public, read-only score snapshots. The scorer publishes only match details,
+    // team/player display names and scorecard data here; private club records remain private.
+    match /publicMatchScores/{matchId} {
+      function linkedMatchExists() {
+        return exists(/databases/$(database)/documents/matches/$(matchId));
+      }
+      function linkedClubId() {
+        return get(/databases/$(database)/documents/matches/$(matchId)).data.clubId;
+      }
+      allow read: if true;
+      allow create, update: if signedIn()
+        && linkedMatchExists()
+        && request.resource.data.matchId == matchId
+        && request.resource.data.clubId == linkedClubId()
+        && isClubAdmin(linkedClubId());
+      allow delete: if signedIn()
+        && linkedMatchExists()
+        && isClubAdmin(linkedClubId());
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club workspace | Boundary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="dashboard-body">
+    <header class="dash-topbar"><a class="brand" href="index.html"><span class="brand-mark">B</span> boundary<span
+                class="brand-dot">.</span></a>
+        <div class="dash-user"><a class="btn btn-ghost btn-small" href="dashboard.html">← Dashboard</a><span
+                id="userEmail">Loading…</span><button class="btn btn-ghost btn-small" id="signOutBtn">Sign out</button>
+        </div>
+    </header>
+    <main class="dash-container">
+        <div class="club-page-heading">
+            <div>
+                <div class="eyebrow"><span></span> CLUB WORKSPACE</div>
+                <h1 id="clubName">Loading club…</h1>
+                <p id="clubMeta">Teams and player directory</p>
+            </div>
+            <div class="club-heading-actions"><a class="btn btn-primary btn-small" id="tournamentLink"
+                    href="tournaments.html">🏆 Tournaments</a><a class="btn btn-ghost btn-small" id="matchLink"
+                    href="matches.html">🏏 Matches</a><span class="role-pill" id="clubRole">MEMBER</span></div>
+        </div>
+        <div id="pageNotice" class="notice hidden" role="status"></div>
+        <div class="management-grid">
+            <section class="management-main">
+                <div class="card">
+                    <div class="card-heading">
+                        <div>
+                            <div class="eyebrow"><span></span> SQUAD STRUCTURE</div>
+                            <h2>Teams</h2>
+                            <p>Create teams for your club and manage their squads.</p>
+                        </div><span class="soft-tag" id="teamCount">0 TEAMS</span>
+                    </div>
+                    <div id="teamList" class="management-list">
+                        <div class="empty-state">Loading teams…</div>
+                    </div>
+                </div>
+                <div class="card admin-only" id="teamFormCard">
+                    <div class="card-heading">
+                        <div>
+                            <div class="eyebrow"><span></span> TEAM SETUP</div>
+                            <h2 id="teamFormTitle">Add a team</h2>
+                        </div>
+                    </div>
+                    <form id="teamForm" class="management-form"><input type="hidden" id="teamId">
+                        <div class="field"><label for="teamName">Team name</label><input id="teamName" maxlength="70"
+                                required placeholder="e.g. Boundary XI"></div>
+                        <div class="field"><label for="teamCategory">Category</label><select id="teamCategory">
+                                <option>Senior</option>
+                                <option>Junior</option>
+                                <option>Academy</option>
+                                <option>Women's</option>
+                                <option>Other</option>
+                            </select></div>
+                        <div class="field"><label for="teamDescription">Description (optional)</label><textarea
+                                id="teamDescription" rows="2" maxlength="200"></textarea></div>
+                        <div class="form-actions"><button class="btn btn-primary" id="saveTeamBtn">Save team
+                                →</button><button class="btn btn-ghost hidden" type="button"
+                                id="cancelTeamEdit">Cancel</button></div>
+                        <p class="form-message" id="teamMessage" role="status"></p>
+                    </form>
+                </div>
+                <div class="card">
+                    <div class="card-heading">
+                        <div>
+                            <div class="eyebrow"><span></span> PLAYER DIRECTORY</div>
+                            <h2>Players</h2>
+                            <p>Maintain player profiles and assign them to a team.</p>
+                        </div><span class="soft-tag" id="playerCount">0 PLAYERS</span>
+                    </div>
+                    <div id="playerList" class="management-list">
+                        <div class="empty-state">Loading players…</div>
+                    </div>
+                </div>
+                <div class="card admin-only" id="playerFormCard">
+                    <div class="card-heading">
+                        <div>
+                            <div class="eyebrow"><span></span> PLAYER REGISTRATION</div>
+                            <h2 id="playerFormTitle">Register a player</h2>
+                        </div>
+                    </div>
+                    <form id="playerForm" class="management-form"><input type="hidden" id="playerId">
+                        <div class="form-two">
+                            <div class="field"><label for="playerName">Full name</label><input id="playerName" required
+                                    maxlength="80" placeholder="Player's full name"></div>
+                            <div class="field"><label for="jerseyNumber">Jersey number</label><input id="jerseyNumber"
+                                    type="number" min="0" max="999" placeholder="e.g. 18"></div>
+                        </div>
+                        <div class="form-two">
+                            <div class="field"><label for="playerRole">Playing role</label><select id="playerRole">
+                                    <option value="Batter">Batter</option>
+                                    <option value="Bowler">Bowler</option>
+                                    <option value="All-rounder">All-rounder</option>
+                                    <option value="Wicketkeeper">Wicketkeeper</option>
+                                </select></div>
+                            <div class="field"><label for="playerTeam">Team</label><select id="playerTeam">
+                                    <option value="">Unassigned</option>
+                                </select></div>
+                        </div>
+                        <div class="form-two">
+                            <div class="field"><label for="battingStyle">Batting style</label><select id="battingStyle">
+                                    <option value="Right-handed">Right-handed</option>
+                                    <option value="Left-handed">Left-handed</option>
+                                    <option value="Not specified">Not specified</option>
+                                </select></div>
+                            <div class="field"><label for="bowlingStyle">Bowling style</label><input id="bowlingStyle"
+                                    maxlength="60" placeholder="e.g. Right-arm fast"></div>
+                        </div>
+                        <div class="form-actions"><button class="btn btn-primary" id="savePlayerBtn">Save player
+                                →</button><button class="btn btn-ghost hidden" type="button"
+                                id="cancelPlayerEdit">Cancel</button></div>
+                        <p class="form-message" id="playerMessage" role="status"></p>
+                    </form>
+                </div>
+            </section>
+            <aside class="workspace-side">
+                <div class="card account-card">
+                    <div class="eyebrow"><span></span> WORKSPACE</div>
+                    <div class="account-avatar">B</div>
+                    <h3 id="sideClubName">Club</h3>
+                    <p id="sideClubLocation">Club management</p>
+                    <div class="account-rule"></div>
+                    <div class="account-row"><span>Teams</span><strong id="sideTeamCount">0</strong></div>
+                    <div class="account-row"><span>Players</span><strong id="sidePlayerCount">0</strong></div>
+                </div>
+                <div class="help-card"><strong>Stage 3 · Club management</strong>
+                    <p>Club admins can add and maintain teams and player profiles. Tournament and match tools arrive in
+                        later stages.</p><span>BOUNDARY · CRICKET MANAGEMENT</span>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="js/club.js"></script>
+    <script>const q = new URLSearchParams(location.search).get("clubId"); if (q) { document.getElementById("tournamentLink").href = "tournaments.html?clubId=" + encodeURIComponent(q); document.getElementById("matchLink").href = "matches.html?clubId=" + encodeURIComponent(q); }</script>
+</body>
+
+</html>

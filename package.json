@@ -1,0 +1,16 @@
+{
+  "name": "boundary-cricket-management",
+  "version": "0.8.0",
+  "private": true,
+  "description": "Boundary cricket scoring and tournament management \u2014 Stage 8 testing and deployment readiness",
+  "scripts": {
+    "start": "npx serve .",
+    "admin:bootstrap": "node scripts/bootstrap-admin.js"
+  },
+  "devDependencies": {
+    "serve": "^14.2.4"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}
