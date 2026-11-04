@@ -1,37 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Live Scorecard | Boundary</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
-    .public-report{max-width:1080px;margin:34px auto;padding:0 22px 50px}
-    .public-report-hero{background:#182c43;color:#fff;border-radius:18px;padding:26px;margin-bottom:20px}
-    .public-report-hero h1{font:800 26px Manrope,sans-serif;margin:10px 0}
-    .public-report-meta{color:#c8d5e1;font-size:13px}
-    .public-report-result{font-weight:800;color:#b9e5ca;margin-top:14px}
-    .public-report-scores{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
-    .public-report-team{background:#ffffff12;border:1px solid #ffffff25;border-radius:12px;padding:14px 16px;min-width:180px}
-    .public-report-team strong{display:block;font:800 24px Manrope;margin-top:5px}
-    .public-report-card{background:#fff;border:1px solid #e1e8ef;border-radius:16px;padding:22px;margin:18px 0}
-    .public-report-card h2{font:700 18px Manrope;margin:0 0 14px}
-    .public-report-card h3{font:700 14px Manrope;margin:18px 0 8px}
-    .public-table-wrap{overflow-x:auto}.public-table{width:100%;border-collapse:collapse;min-width:480px;font-size:13px}
-    .public-table th,.public-table td{padding:10px 9px;text-align:right;border-bottom:1px solid #edf1f5;white-space:nowrap}
-    .public-table th:first-child,.public-table td:first-child{text-align:left}
-    .public-table th{font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#64748b;background:#f8fafc}
-    .public-table tfoot td{font-weight:800;background:#f8fafc}
-    .public-muted{font-size:12px;color:#718096}.public-empty{padding:24px;text-align:center;background:#f8fafc;border-radius:12px;color:#718096}
-    .public-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
-    .public-summary-item{padding:14px;border-radius:11px;background:#f5f8fb}.public-summary-item small{display:block;color:#64748b}
-    .public-summary-item strong{font:800 21px Manrope}
-    @media(max-width:640px){.public-report-hero h1{font-size:22px}.public-report-card{padding:16px}}
+    .public-report {
+      max-width: 1080px;
+      margin: 34px auto;
+      padding: 0 22px 50px
+    }
+
+    .public-report-hero {
+      background: #182c43;
+      color: #fff;
+      border-radius: 18px;
+      padding: 26px;
+      margin-bottom: 20px
+    }
+
+    .public-report-hero h1 {
+      font: 800 26px Manrope, sans-serif;
+      margin: 10px 0
+    }
+
+    .public-report-meta {
+      color: #c8d5e1;
+      font-size: 13px
+    }
+
+    .public-report-result {
+      font-weight: 800;
+      color: #b9e5ca;
+      margin-top: 14px
+    }
+
+    .public-report-scores {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px
+    }
+
+    .public-report-team {
+      background: #ffffff12;
+      border: 1px solid #ffffff25;
+      border-radius: 12px;
+      padding: 14px 16px;
+      min-width: 180px
+    }
+
+    .public-report-team strong {
+      display: block;
+      font: 800 24px Manrope;
+      margin-top: 5px
+    }
+
+    .public-report-card {
+      background: #fff;
+      border: 1px solid #e1e8ef;
+      border-radius: 16px;
+      padding: 22px;
+      margin: 18px 0
+    }
+
+    .public-report-card h2 {
+      font: 700 18px Manrope;
+      margin: 0 0 14px
+    }
+
+    .public-report-card h3 {
+      font: 700 14px Manrope;
+      margin: 18px 0 8px
+    }
+
+    .public-table-wrap {
+      overflow-x: auto
+    }
+
+    .public-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 480px;
+      font-size: 13px
+    }
+
+    .public-table th,
+    .public-table td {
+      padding: 10px 9px;
+      text-align: right;
+      border-bottom: 1px solid #edf1f5;
+      white-space: nowrap
+    }
+
+    .public-table th:first-child,
+    .public-table td:first-child {
+      text-align: left
+    }
+
+    .public-table th {
+      font-size: 10px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #64748b;
+      background: #f8fafc
+    }
+
+    .public-table tfoot td {
+      font-weight: 800;
+      background: #f8fafc
+    }
+
+    .public-muted {
+      font-size: 12px;
+      color: #718096
+    }
+
+    .public-empty {
+      padding: 24px;
+      text-align: center;
+      background: #f8fafc;
+      border-radius: 12px;
+      color: #718096
+    }
+
+    .public-summary {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px
+    }
+
+    .public-summary-item {
+      padding: 14px;
+      border-radius: 11px;
+      background: #c4c8cc
+    }
+
+    .public-summary-item small {
+      display: block;
+      color: #64748b
+    }
+
+    .public-summary-item strong {
+      font: 800 21px Manrope
+    }
+
+    @media(max-width:640px) {
+      .public-report-hero h1 {
+        font-size: 22px
+      }
+
+      .public-report-card {
+        padding: 16px
+      }
+    }
   </style>
 </head>
+
 <body class="dashboard-body">
   <header class="dash-topbar">
     <a class="brand" href="index.html"><span class="brand-mark">B</span> boundary<span class="brand-dot">.</span></a>
@@ -47,8 +179,12 @@
       <div id="publicHeadlineScores" class="public-report-scores"></div>
     </section>
     <div id="publicInningsReports"></div>
-    <section class="public-report-card"><h2>Match summary</h2><div id="publicMatchSummary" class="public-summary"></div></section>
+    <section class="public-report-card">
+      <h2>Match summary</h2>
+      <div id="publicMatchSummary" class="public-summary"></div>
+    </section>
   </main>
   <script type="module" src="js/public-scorecard.js"></script>
 </body>
+
 </html>

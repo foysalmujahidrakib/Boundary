@@ -1,45 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Workspace | Boundary</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body class="dashboard-body">
   <header class="dash-topbar">
     <a class="brand" href="index.html"><span class="brand-mark">B</span> boundary<span class="brand-dot">.</span></a>
-    <div class="dash-user"><span id="userEmail">Loading account…</span><button class="btn btn-ghost btn-small" id="signOutBtn">Sign out</button></div>
+    <div class="dash-user"><span id="userEmail">Loading account…</span><button class="btn btn-ghost btn-small"
+        id="signOutBtn">Sign out</button></div>
   </header>
   <main class="dash-container">
-    <div class="dash-heading"><div><div class="eyebrow"><span></span> YOUR WORKSPACE</div><h1>Good cricket starts here<span>.</span></h1><p>Manage your club workspace and get ready for your next match.</p></div><span class="role-pill" id="rolePill">MEMBER</span></div>
+    <div class="dash-heading">
+      <div>
+        <div class="eyebrow"><span></span> YOUR WORKSPACE</div>
+        <h1>Good cricket starts here<span>.</span></h1>
+        <p>Manage your club workspace and get ready for your next match.</p>
+      </div><span class="role-pill" id="rolePill">MEMBER</span>
+    </div>
     <div class="workspace-grid">
       <section class="workspace-main">
         <div class="card workspace-card">
-          <div class="card-heading"><div><div class="eyebrow"><span></span> CLUB WORKSPACE</div><h2 id="clubHeading">Your clubs</h2></div><span class="soft-tag" id="clubCount">0 CLUBS</span></div>
-          <div id="clubList" class="club-list"><div class="empty-state">Loading your club memberships…</div></div>
+          <div class="card-heading">
+            <div>
+              <div class="eyebrow"><span></span> CLUB WORKSPACE</div>
+              <h2 id="clubHeading">Your clubs</h2>
+            </div><span class="soft-tag" id="clubCount">0 CLUBS</span>
+          </div>
+          <div id="clubList" class="club-list">
+            <div class="empty-state">Loading your club memberships…</div>
+          </div>
         </div>
         <div class="card create-card" id="createClubCard">
-          <div class="card-heading"><div><div class="eyebrow"><span></span> START SOMETHING</div><h2>Create a club</h2><p>Set up a dedicated workspace for your cricket club or organization.</p></div><span class="create-icon">＋</span></div>
+          <div class="card-heading">
+            <div>
+              <div class="eyebrow"><span></span> START SOMETHING</div>
+              <h2>Create a club</h2>
+              <p>Set up a dedicated workspace for your cricket club or organization.</p>
+            </div><span class="create-icon">＋</span>
+          </div>
           <form id="createClubForm" class="club-form">
-            <div class="field"><label for="clubName">Club / organization name</label><input id="clubName" name="clubName" required maxlength="70" placeholder="e.g. Riverside Cricket Club"></div>
-            <div class="field"><label for="clubLocation">City or area <span class="optional">OPTIONAL</span></label><input id="clubLocation" name="clubLocation" maxlength="80" placeholder="e.g. Dhaka"></div>
-            <div class="field"><label for="clubDescription">Short description <span class="optional">OPTIONAL</span></label><textarea id="clubDescription" name="clubDescription" rows="3" maxlength="240" placeholder="Tell members what your club is about"></textarea></div>
-            <button class="btn btn-primary" id="createClubBtn" type="submit">Create club workspace <span>→</span></button>
+            <div class="field"><label for="clubName">Club / organization name</label><input id="clubName"
+                name="clubName" required maxlength="70" placeholder="e.g. Riverside Cricket Club"></div>
+            <div class="field"><label for="clubLocation">City or area <span
+                  class="optional">OPTIONAL</span></label><input id="clubLocation" name="clubLocation" maxlength="80"
+                placeholder="e.g. Dhaka"></div>
+            <div class="field"><label for="clubDescription">Short description <span
+                  class="optional">OPTIONAL</span></label><textarea id="clubDescription" name="clubDescription" rows="3"
+                maxlength="240" placeholder="Tell members what your club is about"></textarea></div>
+            <button class="btn btn-primary" id="createClubBtn" type="submit">Create club workspace
+              <span>→</span></button>
             <p class="form-message" id="clubMessage" role="status"></p>
           </form>
         </div>
       </section>
       <aside class="workspace-side">
-        <div class="card account-card"><div class="eyebrow"><span></span> ACCOUNT</div><div class="account-avatar" id="userInitial">U</div><h3 id="userName">Your account</h3><p id="accountEmail"></p><div class="account-rule"></div><div class="account-row"><span>Account status</span><strong class="verified">ACTIVE</strong></div><div class="account-row"><span>Memberships</span><strong id="membershipCount">0</strong></div></div>
-        <div class="help-card"><strong>What's next?</strong><p>Once your club is created, the next stage will add team registration, member invitations and tournament tools.</p><span>STAGE 3 · CLUB MANAGEMENT</span></div>
+        <div class="card account-card">
+          <div class="eyebrow"><span></span> ACCOUNT</div>
+          <div class="account-avatar" id="userInitial">U</div>
+          <h3 id="userName">Your account</h3>
+          <p id="accountEmail"></p>
+          <div class="account-rule"></div>
+          <div class="account-row"><span>Account status</span><strong class="verified">ACTIVE</strong></div>
+          <div class="account-row"><span>Memberships</span><strong id="membershipCount">0</strong></div>
+        </div>
+      
       </aside>
     </div>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <script type="module" src="js/dashboard.js"></script>
 </body>
+
 </html>

@@ -1,35 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Scoring | Boundary</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css">
-<style>
-.score-wrap{max-width:1180px;margin:28px auto;padding:0 22px}.score-hero{background:#182c43;color:#fff;border-radius:18px;padding:26px;margin-bottom:20px}.score-hero h1{font:800 28px Manrope,sans-serif;margin:5px 0}.score-line{display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap}.score-total{font:800 42px Manrope,sans-serif}.score-meta{color:#c5d2df}.score-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.8fr);gap:20px}.score-card{background:#fff;border:1px solid #e1e8ef;border-radius:16px;padding:22px;margin-bottom:18px}.score-card h2{font:700 18px Manrope;margin:0 0 16px}.score-controls{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.score-btn{border:1px solid #d6e0e9;border-radius:12px;padding:16px 8px;background:#f7f9fb;font:700 20px Manrope;cursor:pointer;color:#18324a}.score-btn:hover{background:#e9f1f8}.score-btn.primary{background:#1d5d88;color:white;border-color:#1d5d88}.score-btn.wicket{background:#fff0ef;color:#a72f2a;border-color:#f0c7c4}.score-selects{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.score-selects label,.start-grid label{display:block;font-size:12px;font-weight:700;color:#536579;margin-bottom:6px}.score-selects select,.start-grid select,.start-grid input{width:100%;padding:11px;border:1px solid #d6e0e9;border-radius:9px;background:white}.score-table{width:100%;border-collapse:collapse;font-size:13px}.score-table th,.score-table td{text-align:left;padding:9px 7px;border-bottom:1px solid #edf1f5}.score-table th{color:#64748b;font-size:11px;text-transform:uppercase}.score-pill{display:inline-block;padding:5px 9px;border-radius:99px;background:#edf4f8;color:#315b78;font-size:11px;font-weight:700}.start-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.start-grid .wide{grid-column:1/-1}.muted{color:#718096;font-size:13px}.ball-log{display:flex;flex-wrap:wrap;gap:7px}.ball-chip{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#edf2f7;font-size:12px;font-weight:700}.ball-chip.boundary{background:#d9eefc;color:#155b8c}.ball-chip.wicket{background:#ffe4e1;color:#a72f2a}.notice-box{padding:12px 14px;border-radius:10px;background:#fff8e6;color:#77551a;margin-bottom:14px}.hidden{display:none!important}
-@media(max-width:800px){.score-grid{grid-template-columns:1fr}.score-selects{grid-template-columns:1fr}.score-controls{grid-template-columns:repeat(4,1fr)}.score-total{font-size:34px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Scoring | Boundary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .score-wrap {
+            max-width: 1180px;
+            margin: 28px auto;
+            padding: 0 22px
+        }
+
+        .score-hero {
+            background: #182c43;
+            color: #fff;
+            border-radius: 18px;
+            padding: 26px;
+            margin-bottom: 20px
+        }
+
+        .score-hero h1 {
+            font: 800 28px Manrope, sans-serif;
+            margin: 5px 0
+        }
+
+        .score-line {
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: center;
+            flex-wrap: wrap
+        }
+
+        .score-total {
+            font: 800 42px Manrope, sans-serif
+        }
+
+        .score-meta {
+            color: #c5d2df
+        }
+
+        .score-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.4fr) minmax(280px, .8fr);
+            gap: 20px
+        }
+
+        .score-card {
+            background: #fff;
+            border: 1px solid #e1e8ef;
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 18px
+        }
+
+        .score-card h2 {
+            font: 700 18px Manrope;
+            margin: 0 0 16px
+        }
+
+        .score-controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px
+        }
+
+        .score-btn {
+            border: 1px solid #d6e0e9;
+            border-radius: 12px;
+            padding: 16px 8px;
+            background: #f7f9fb;
+            font: 700 20px Manrope;
+            cursor: pointer;
+            color: #18324a
+        }
+
+        .score-btn:hover {
+            background: #e9f1f8
+        }
+
+        .score-btn.primary {
+            background: #1d5d88;
+            color: white;
+            border-color: #1d5d88
+        }
+
+        .score-btn.wicket {
+            background: #fff0ef;
+            color: #a72f2a;
+            border-color: #f0c7c4
+        }
+
+        .score-selects {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px
+        }
+
+        .score-selects label,
+        .start-grid label {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #536579;
+            margin-bottom: 6px
+        }
+
+        .score-selects select,
+        .start-grid select,
+        .start-grid input {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #d6e0e9;
+            border-radius: 9px;
+            background: white
+        }
+
+        .score-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px
+        }
+
+        .score-table th,
+        .score-table td {
+            text-align: left;
+            padding: 9px 7px;
+            border-bottom: 1px solid #edf1f5
+        }
+
+        .score-table th {
+            color: #64748b;
+            font-size: 11px;
+            text-transform: uppercase
+        }
+
+        .score-pill {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 99px;
+            background: #edf4f8;
+            color: #315b78;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .start-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px
+        }
+
+        .start-grid .wide {
+            grid-column: 1/-1
+        }
+
+        .muted {
+            color: #718096;
+            font-size: 13px
+        }
+
+        .ball-log {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px
+        }
+
+        .ball-chip {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: #edf2f7;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .ball-chip.boundary {
+            background: #d9eefc;
+            color: #155b8c
+        }
+
+        .ball-chip.wicket {
+            background: #ffe4e1;
+            color: #a72f2a
+        }
+
+        .notice-box {
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #fff8e6;
+            color: #77551a;
+            margin-bottom: 14px
+        }
+
+        .hidden {
+            display: none !important
+        }
+
+        @media(max-width:800px) {
+            .score-grid {
+                grid-template-columns: 1fr
+            }
+
+            .score-selects {
+                grid-template-columns: 1fr
+            }
+
+            .score-controls {
+                grid-template-columns: repeat(4, 1fr)
+            }
+
+            .score-total {
+                font-size: 34px
+            }
+        }
+    </style>
 </head>
+
 <body class="dashboard-body">
-<header class="dash-topbar"><a class="brand" href="index.html"><span class="brand-mark">B</span> boundary<span class="brand-dot">.</span></a><div class="dash-user"><a class="btn btn-ghost btn-small" id="scorecardLink" href="scorecard.html">Scorecard</a><a class="btn btn-ghost btn-small" id="backMatches" href="matches.html">← Match Centre</a><span id="userEmail">Loading…</span><button class="btn btn-ghost btn-small" id="signOutBtn">Sign out</button></div></header>
-<main class="score-wrap">
-<div id="pageNotice" class="notice hidden" role="status"></div>
-<section class="score-hero"><div class="score-line"><div><div class="eyebrow"><span></span> LIVE MATCH CENTRE</div><h1 id="matchTitle">Loading match…</h1><div class="score-meta" id="matchMeta">Loading fixture details</div></div><div style="text-align:right"><div class="score-total" id="heroScore">0/0</div><div class="score-meta" id="oversText">0.0 overs</div></div></div></section>
-<div class="score-grid"><section>
-<div class="score-card" id="setupCard"><h2>Start innings</h2><p class="muted">Choose the batting and bowling teams, then select the opening batters and bowler.</p>
-<form id="inningsForm" class="start-grid"><div><label for="battingTeam">Batting team</label><select id="battingTeam" required></select></div><div><label for="bowlingTeam">Bowling team</label><select id="bowlingTeam" required></select></div><div><label for="openingStriker">Opening striker</label><select id="openingStriker" required></select></div><div><label for="openingNonStriker">Opening non-striker</label><select id="openingNonStriker" required></select></div><div class="wide"><label for="openingBowler">Opening bowler</label><select id="openingBowler" required></select></div><div class="wide"><button class="btn btn-primary" type="submit" id="startInningsBtn">Start innings →</button></div></form></div>
-<div class="score-card hidden" id="liveCard"><div class="score-line"><div><h2 id="inningsHeading">1st innings</h2><div class="muted" id="inningsTeams"></div></div><span class="score-pill" id="inningsStatus">IN PROGRESS</span></div>
-<div class="score-selects"><div><label for="strikerSelect">Striker</label><select id="strikerSelect"></select></div><div><label for="nonStrikerSelect">Non-striker</label><select id="nonStrikerSelect"></select></div><div><label for="bowlerSelect">Bowler</label><select id="bowlerSelect"></select></div></div>
-<hr style="border:0;border-top:1px solid #edf1f5;margin:18px 0">
-<h2>Record delivery</h2><p class="muted">Tap a run value. Use Extras or Wicket to record the delivery type.</p>
-<div class="score-controls" style="margin-bottom:10px"><button class="score-btn" data-run="0">0</button><button class="score-btn" data-run="1">1</button><button class="score-btn" data-run="2">2</button><button class="score-btn" data-run="3">3</button><button class="score-btn boundary" data-run="4">4</button><button class="score-btn" data-run="5">5</button><button class="score-btn boundary" data-run="6">6</button><button class="score-btn wicket" id="wicketBtn">Wicket</button></div>
-<div class="score-controls"><button class="score-btn" id="wideBtn">Wide</button><button class="score-btn" id="noBallBtn">No-ball</button><button class="score-btn" id="byeBtn">Bye</button><button class="score-btn" id="legByeBtn">Leg-bye</button></div>
-<div class="muted" id="scoreMessage" style="margin-top:12px" role="status"></div>
-<div class="score-line" style="margin-top:16px"><button class="btn btn-ghost btn-small" id="undoBtn">↶ Undo last ball</button><button class="btn btn-ghost btn-small" id="endInningsBtn">End innings</button></div></div>
-<div class="score-card"><h2>Recent deliveries</h2><div id="ballLog" class="ball-log"><span class="muted">No deliveries yet.</span></div></div>
-</section>
-<aside><div class="score-card"><h2>Batting score</h2><div id="battingTable" class="muted">Innings not started.</div></div><div class="score-card"><h2>Bowling figures</h2><div id="bowlingTable" class="muted">Innings not started.</div></div><div class="score-card"><h2>Innings summary</h2><div id="inningsSummary" class="muted">No innings recorded.</div><button class="btn btn-primary hidden" id="nextInningsBtn" style="margin-top:14px;width:100%">Start next innings →</button></div></aside>
-</div>
-</main><div class="toast" id="toast" role="status" aria-live="polite"></div>
-<script type="module" src="js/scoring.js"></script></body></html>
+    <header class="dash-topbar"><a class="brand" href="index.html"><span class="brand-mark">B</span> boundary<span
+                class="brand-dot">.</span></a>
+        <div class="dash-user"><a class="btn btn-ghost btn-small" id="scorecardLink"
+                href="scorecard.html">Scorecard</a><a class="btn btn-ghost btn-small" id="backMatches"
+                href="matches.html">← Match Centre</a><span id="userEmail">Loading…</span><button
+                class="btn btn-ghost btn-small" id="signOutBtn">Sign out</button></div>
+    </header>
+    <main class="score-wrap">
+        <div id="pageNotice" class="notice hidden" role="status"></div>
+        <section class="score-hero">
+            <div class="score-line">
+                <div>
+                    <div class="eyebrow"><span></span> LIVE MATCH CENTRE</div>
+                    <h1 id="matchTitle">Loading match…</h1>
+                    <div class="score-meta" id="matchMeta">Loading fixture details</div>
+                </div>
+                <div style="text-align:right">
+                    <div class="score-total" id="heroScore">0/0</div>
+                    <div class="score-meta" id="oversText">0.0 overs</div>
+                </div>
+            </div>
+        </section>
+        <div class="score-grid">
+            <section>
+                <div class="score-card" id="setupCard">
+                    <h2>Start innings</h2>
+                    <p class="muted">Choose the batting and bowling teams, then select the opening batters and bowler.
+                    </p>
+                    <form id="inningsForm" class="start-grid">
+                        <div><label for="battingTeam">Batting team</label><select id="battingTeam" required></select>
+                        </div>
+                        <div><label for="bowlingTeam">Bowling team</label><select id="bowlingTeam" required></select>
+                        </div>
+                        <div><label for="openingStriker">Opening striker</label><select id="openingStriker"
+                                required></select></div>
+                        <div><label for="openingNonStriker">Opening non-striker</label><select id="openingNonStriker"
+                                required></select></div>
+                        <div class="wide"><label for="openingBowler">Opening bowler</label><select id="openingBowler"
+                                required></select></div>
+                        <div class="wide"><button class="btn btn-primary" type="submit" id="startInningsBtn">Start
+                                innings →</button></div>
+                    </form>
+                </div>
+                <div class="score-card hidden" id="liveCard">
+                    <div class="score-line">
+                        <div>
+                            <h2 id="inningsHeading">1st innings</h2>
+                            <div class="muted" id="inningsTeams"></div>
+                        </div><span class="score-pill" id="inningsStatus">IN PROGRESS</span>
+                    </div>
+                    <div class="score-selects">
+                        <div><label for="strikerSelect">Striker</label><select id="strikerSelect"></select></div>
+                        <div><label for="nonStrikerSelect">Non-striker</label><select id="nonStrikerSelect"></select>
+                        </div>
+                        <div><label for="bowlerSelect">Bowler</label><select id="bowlerSelect"></select></div>
+                    </div>
+                    <hr style="border:0;border-top:1px solid #edf1f5;margin:18px 0">
+                    <h2>Record delivery</h2>
+                    <p class="muted">Tap a run value. Use Extras or Wicket to record the delivery type.</p>
+                    <div class="score-controls" style="margin-bottom:10px"><button class="score-btn"
+                            data-run="0">0</button><button class="score-btn" data-run="1">1</button><button
+                            class="score-btn" data-run="2">2</button><button class="score-btn"
+                            data-run="3">3</button><button class="score-btn boundary" data-run="4">4</button><button
+                            class="score-btn" data-run="5">5</button><button class="score-btn boundary"
+                            data-run="6">6</button><button class="score-btn wicket" id="wicketBtn">Wicket</button></div>
+                    <div class="score-controls"><button class="score-btn" id="wideBtn">Wide</button><button
+                            class="score-btn" id="noBallBtn">No-ball</button><button class="score-btn"
+                            id="byeBtn">Bye</button><button class="score-btn" id="legByeBtn">Leg-bye</button></div>
+                    <div class="muted" id="scoreMessage" style="margin-top:12px" role="status"></div>
+                    <div class="score-line" style="margin-top:16px"><button class="btn btn-ghost btn-small"
+                            id="undoBtn">↶ Undo last ball</button><button class="btn btn-ghost btn-small"
+                            id="endInningsBtn">End innings</button></div>
+                </div>
+                <div class="score-card">
+                    <h2>Recent deliveries</h2>
+                    <div id="ballLog" class="ball-log"><span class="muted">No deliveries yet.</span></div>
+                </div>
+            </section>
+            <aside>
+                <div class="score-card">
+                    <h2>Batting score</h2>
+                    <div id="battingTable" class="muted">Innings not started.</div>
+                </div>
+                <div class="score-card">
+                    <h2>Bowling figures</h2>
+                    <div id="bowlingTable" class="muted">Innings not started.</div>
+                </div>
+                <div class="score-card">
+                    <h2>Innings summary</h2>
+                    <div id="inningsSummary" class="muted">No innings recorded.</div><button
+                        class="btn btn-primary hidden" id="nextInningsBtn" style="margin-top:14px;width:100%">Start next
+                        innings →</button>
+                </div>
+            </aside>
+        </div>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script type="module" src="js/scoring.js"></script>
+</body>
+
+</html>
