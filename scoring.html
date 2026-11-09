@@ -398,19 +398,19 @@
             z-index: 50
         }
 
-        .modal-backdrop {
+        .score-modal-backdrop {
             position: fixed;
             inset: 0;
             background: #101820a8;
-            display: none;
+            display: flex;
             align-items: center;
             justify-content: center;
             padding: 18px;
-            z-index: 1000
+            z-index: 1000;
         }
 
-        .modal-backdrop.open {
-            display: flex
+        .score-modal-backdrop[hidden] {
+            display: none !important;
         }
 
         .score-modal {
@@ -641,7 +641,7 @@
             </aside>
         </div>
     </main>
-    <div class="modal-backdrop" id="wicketModal" role="dialog" aria-modal="true" aria-labelledby="wicketModalTitle">
+    <div class="score-modal-backdrop" id="wicketModal" role="dialog" aria-modal="true" aria-labelledby="wicketModalTitle" hidden>
         <div class="score-modal">
             <h2 id="wicketModalTitle">Wicket details</h2>
             <p class="muted">Choose the dismissed batter and the incoming batter.</p>
@@ -662,7 +662,7 @@
                     class="btn btn-primary" id="confirmWicket">Confirm wicket</button></div>
         </div>
     </div>
-    <div class="modal-backdrop" id="extrasModal" role="dialog" aria-modal="true" aria-labelledby="extrasModalTitle">
+    <div class="score-modal-backdrop" id="extrasModal" role="dialog" aria-modal="true" aria-labelledby="extrasModalTitle" hidden>
         <div class="score-modal">
             <h2 id="extrasModalTitle">Record extras</h2>
             <p class="muted" id="extrasHelp">Enter the runs for this delivery.</p>

@@ -960,8 +960,14 @@ document.querySelectorAll("[data-run]").forEach(button => {
   button.addEventListener("click", () => saveDelivery("normal", Number(button.dataset.run)));
 });
 
-const openModal = id => $(id).classList.add("open");
-const closeModal = id => $(id).classList.remove("open");
+const openModal = id => {
+  const modal = $(id);
+  modal.hidden = false;
+  modal.querySelector("select, input, button")?.focus();
+};
+const closeModal = id => {
+  $(id).hidden = true;
+};
 let pendingExtrasKind = null;
 
 $("wicketBtn").addEventListener("click", () => {
