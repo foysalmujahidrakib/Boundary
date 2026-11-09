@@ -1,14 +1,16 @@
 :root {
-    --ink: #23323b;
-    --muted: #788891;
-    --blue: #526b79;
-    --blue-dark: #344c5a;
-    --blue-deep: #263b48;
-    --pale: #f2f5f6;
-    --line: #e1e8eb;
-    --green: #23845d;
+    --ink: #ffffff;
+    --muted: #64748b;
+    --blue: #00ffc2;
+    --blue-dark: #00ffc2;
+    --blue-deep: #111c2d;
+    --pale: #0b121e;
+    --line: rgba(100, 116, 139, .38);
+    --green: #10b981;
     --white: #fff;
-    --shadow: 0 18px 50px rgba(34, 54, 66, .12)
+    --surface: #111c2d;
+    --accent-orange: #ff5e1e;
+    --shadow: 0 18px 50px rgba(0, 0, 0, .45)
 }
 
 * {
@@ -23,7 +25,7 @@ body {
     margin: 0;
     color: var(--ink);
     font-family: "DM Sans", sans-serif;
-    background: #fff
+    background: var(--pale)
 }
 
 a {
@@ -50,7 +52,7 @@ textarea {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid var(--line);
-    background: #fff;
+    background: var(--surface);
     position: relative;
     z-index: 5
 }
@@ -61,7 +63,7 @@ textarea {
     gap: 9px;
     font: 800 22px Manrope, sans-serif;
     letter-spacing: -1px;
-    color: var(--blue-deep)
+    color: var(--white)
 }
 
 .brand-mark {
@@ -71,18 +73,18 @@ textarea {
     place-items: center;
     border-radius: 9px 9px 9px 3px;
     background: var(--blue);
-    color: #fff;
+    color: #04131e;
     font-size: 18px
 }
 
 .brand-dot {
-    color: #91a8b3
+    color: var(--muted)
 }
 
 .topbar nav {
     display: flex;
     gap: 28px;
-    color: #71818a;
+    color: var(--muted);
     font-size: 12px;
     font-weight: 600
 }
@@ -114,21 +116,21 @@ textarea {
 
 .btn-primary {
     background: var(--blue-dark);
-    color: #fff
+    color: #04131e
 }
 
 .btn-primary:hover {
-    background: var(--blue-deep)
+    filter: brightness(.95)
 }
 
 .btn-ghost {
     background: transparent;
-    color: var(--blue-dark)
+    color: var(--white)
 }
 
 .btn-outline {
-    border: 1px solid #cbd6db;
-    color: var(--blue-dark);
+    border: 1px solid var(--line);
+    color: var(--white);
     background: transparent
 }
 
@@ -162,23 +164,42 @@ textarea {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #80919a;
+    color: #ffffff;
     font-size: 9px;
     letter-spacing: .16em;
     font-weight: 700
 }
 
+
 .eyebrow>span {
     width: 22px;
     height: 1px;
-    background: #91a7b1
+    background: #91b191
 }
 
+.eyebrow2 h1 {
+    display: block;
+    font: 800 clamp(44px, 5.5vw, 67px)/1.08 Manrope, sans-serif;
+    letter-spacing: -3px;
+    color: #22c55e;
+    margin: 19px 0 14px;
+}
+
+.eyebrow2 h1 strong {
+    color: #ffffff;
+    font: inherit;
+}
+.eyebrow2 h3 {
+    font: 800 clamp(40px, 5.5vw, 60px)/1.08 Manrope, sans-serif;
+    letter-spacing: -3px;
+    color: #ffffff;
+    margin: 19px 0 14px
+}
 .hero h1,
 .dash-heading h1 {
     font: 800 clamp(44px, 5.5vw, 67px)/1.08 Manrope, sans-serif;
     letter-spacing: -3px;
-    color: var(--blue-deep);
+    
     margin: 19px 0 14px
 }
 
@@ -189,7 +210,7 @@ textarea {
 
 .hero-copy>p {
     max-width: 440px;
-    color: #72818a;
+    color: #ffffff;
     font-size: 14px;
     line-height: 1.85
 }
@@ -219,7 +240,7 @@ textarea {
 .hero-panel {
     min-height: 360px;
     border-radius: 10px;
-    background: linear-gradient(145deg, #314a58, #526e7c);
+    background: linear-gradient(145deg, #111c2d, #1a293e);
     padding: 23px;
     color: #fff;
     position: relative;
@@ -244,11 +265,11 @@ textarea {
     position: relative;
     z-index: 1;
     margin-top: 65px;
-    background: #fff;
+    background: #0f1a2b;
     color: var(--ink);
     border-radius: 7px;
     padding: 19px 20px;
-    box-shadow: 0 10px 25px rgba(20, 35, 43, .12)
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .35)
 }
 
 .panel-label {
@@ -345,7 +366,7 @@ textarea {
 }
 
 .trust-strip {
-    background: #f3f6f7;
+    background: #08151a;
     border-block: 1px solid var(--line)
 }
 
@@ -377,12 +398,12 @@ textarea {
 .how-grid h2 {
     font: 800 34px/1.18 Manrope;
     letter-spacing: -1.4px;
-    color: var(--blue-deep);
+    
     margin: 13px 0 30px
 }
 
 .section-heading h2 span {
-    color: #91a8b3
+    color: #ffffff
 }
 
 .feature-grid {
@@ -403,7 +424,7 @@ textarea {
     height: 36px;
     display: grid;
     place-items: center;
-    background: #edf2f4;
+    background: #02151f;
     border-radius: 7px;
     color: var(--blue);
     font-size: 19px
@@ -411,7 +432,7 @@ textarea {
 
 .feature-card h3 {
     font: 700 14px Manrope;
-    color: var(--blue-deep);
+    
     margin: 19px 0 8px
 }
 
@@ -419,12 +440,12 @@ textarea {
 .how-grid p {
     font-size: 11px;
     line-height: 1.8;
-    color: #7d8b93;
+    color: #ffffff;
     margin: 0
 }
 
 .how-section {
-    background: #f4f6f7
+    background: #02151f
 }
 
 .how-grid {
@@ -519,7 +540,9 @@ footer {
 
 .modal {
     width: min(100%, 420px);
-    background: #fff;
+    background: var(--surface);
+    color: var(--white);
+    border: 1px solid var(--line);
     border-radius: 10px;
     padding: 30px;
     position: relative;
@@ -660,7 +683,7 @@ footer {
 
 /* Workspace */
 .dashboard-body {
-    background: #f4f6f7;
+    background: var(--pale);
     min-height: 100vh
 }
 
@@ -670,7 +693,7 @@ footer {
 
 .dash-user {
     font-size: 10px;
-    color: #829098
+    color: var(--muted)
 }
 
 .dash-container {
@@ -692,12 +715,12 @@ footer {
 }
 
 .dash-heading h1 span {
-    color: #91a8b3
+    color: var(--blue)
 }
 
 .dash-heading p {
     font-size: 11px;
-    color: #829098;
+    color: var(--muted);
     margin: 0
 }
 
@@ -706,8 +729,8 @@ footer {
     font-size: 8px;
     letter-spacing: .1em;
     font-weight: 800;
-    color: #607783;
-    background: #e7eef1;
+    color: var(--white);
+    background: rgba(100, 116, 139, .26);
     padding: 7px 9px;
     border-radius: 3px
 }
@@ -725,7 +748,7 @@ footer {
 }
 
 .card {
-    background: #fff;
+    background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 23px
@@ -740,13 +763,13 @@ footer {
 
 .card-heading h2 {
     font: 800 19px Manrope;
-    color: var(--blue-deep);
+    color: var(--white);
     margin: 8px 0 5px
 }
 
 .card-heading p {
     font-size: 10px;
-    color: #85929a;
+    color: var(--muted);
     margin: 0;
     line-height: 1.6
 }
@@ -758,9 +781,9 @@ footer {
 .empty-state {
     padding: 22px 12px;
     text-align: center;
-    border: 1px dashed #dce4e8;
+    border: 1px dashed var(--line);
     border-radius: 6px;
-    color: #87959c;
+    color: var(--muted);
     font-size: 10px
 }
 
@@ -769,7 +792,7 @@ footer {
     align-items: center;
     gap: 12px;
     padding: 13px 0;
-    border-bottom: 1px solid #edf0f1
+    border-bottom: 1px solid var(--line)
 }
 
 .club-item:last-child {
@@ -782,7 +805,7 @@ footer {
     display: grid;
     place-items: center;
     border-radius: 7px;
-    background: #e9eff2;
+    background: rgba(100, 116, 139, .22);
     color: var(--blue-dark);
     font: 800 13px Manrope
 }
@@ -798,18 +821,18 @@ footer {
 
 .club-info strong {
     font-size: 11px;
-    color: var(--blue-deep)
+    color: var(--white)
 }
 
 .club-info small {
     font-size: 9px;
-    color: #8a989f;
+    color: var(--muted);
     margin-top: 4px
 }
 
 .club-role {
     font-size: 8px;
-    color: #607b88;
+    color: var(--muted);
     font-weight: 800;
     letter-spacing: .07em
 }
@@ -819,7 +842,7 @@ footer {
     height: 34px;
     display: grid;
     place-items: center;
-    background: #edf2f4;
+    background: rgba(100, 116, 139, .2);
     border-radius: 6px;
     color: var(--blue);
     font-size: 22px
@@ -832,7 +855,7 @@ footer {
 
 .optional {
     font-size: 8px;
-    color: #a1adb2;
+    color: var(--muted);
     margin-left: 5px;
     letter-spacing: .08em
 }
@@ -859,7 +882,7 @@ footer {
     border-radius: 50%;
     display: grid;
     place-items: center;
-    background: #e5edf0;
+    background: rgba(100, 116, 139, .2);
     color: var(--blue-dark);
     font: 800 20px Manrope;
     margin: 22px auto 10px
@@ -867,13 +890,13 @@ footer {
 
 .account-card h3 {
     font: 700 14px Manrope;
-    color: var(--blue-deep);
+    color: var(--white);
     margin: 0
 }
 
 .account-card>p {
     font-size: 9px;
-    color: #89969d;
+    color: var(--muted);
     margin: 5px 0 18px;
     overflow-wrap: anywhere
 }
@@ -887,7 +910,7 @@ footer {
     display: flex;
     justify-content: space-between;
     padding: 8px 0;
-    color: #849198;
+    color: var(--muted);
     font-size: 9px
 }
 
@@ -903,25 +926,25 @@ footer {
     margin-top: 15px;
     border-radius: 7px;
     padding: 19px;
-    background: #e8eef1
+    background: rgba(100, 116, 139, .16)
 }
 
 .help-card strong {
     font: 700 12px Manrope;
-    color: var(--blue-deep)
+    color: var(--white)
 }
 
 .help-card p {
     font-size: 10px;
     line-height: 1.7;
-    color: #74858e
+    color: var(--muted)
 }
 
 .help-card>span {
     font-size: 8px;
     letter-spacing: .1em;
     font-weight: 800;
-    color: #78909c
+    color: var(--muted)
 }
 
 @media(max-width:800px) {
@@ -1410,19 +1433,19 @@ footer {
 
 .public-live-card {
     display: block;
-    background: #fff;
-    border: 1px solid #e1e8ef;
+    background: var(--surface);
+    border: 1px solid var(--line);
     border-radius: 16px;
     padding: 20px;
-    color: #182c43;
+    color: var(--white);
     text-decoration: none;
     transition: transform .18s ease, border-color .18s ease;
-    box-shadow: 0 8px 24px rgba(24, 44, 67, .05)
+    box-shadow: var(--shadow)
 }
 
 .public-live-card:hover {
     transform: translateY(-3px);
-    border-color: #8aa8c0
+    border-color: var(--blue)
 }
 
 .public-live-card-top {
@@ -1437,15 +1460,15 @@ footer {
     font-size: 10px;
     font-weight: 800;
     letter-spacing: .08em;
-    color: #b42318;
-    background: #fff0ee;
+    color: #2a0f05;
+    background: var(--accent-orange);
     padding: 6px 9px;
     border-radius: 999px
 }
 
 .public-live-date {
     font-size: 11px;
-    color: #718096
+    color: var(--muted)
 }
 
 .public-live-team {
@@ -1454,7 +1477,7 @@ footer {
     align-items: center;
     gap: 12px;
     padding: 10px 0;
-    border-bottom: 1px solid #edf1f5
+    border-bottom: 1px solid var(--line)
 }
 
 .public-live-team:last-of-type {
@@ -1472,15 +1495,15 @@ footer {
 
 .public-live-overs {
     font-size: 12px;
-    color: #718096;
+    color: var(--muted);
     margin-top: 12px
 }
 
 .public-live-empty {
     padding: 24px;
-    border: 1px dashed #cbd5e1;
+    border: 1px dashed var(--line);
     border-radius: 14px;
-    color: #718096;
+    color: var(--muted);
     text-align: center;
     grid-column: 1/-1
 }
@@ -1491,7 +1514,7 @@ footer {
 }
 
 .live-heading p {
-    color: #718096;
+    color: var(--muted);
     margin-top: 8px
 }
 
@@ -1502,5 +1525,542 @@ footer {
 
     .public-live-team b {
         font-size: 17px
+    }
+}
+
+/* ========================================
+   PUBLIC TOURNAMENT STANDINGS
+======================================== */
+
+.public-tournament-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.public-tournament-card {
+    overflow: hidden;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.tournament-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 22px;
+    border: 0;
+    background: var(--surface);
+    color: var(--white);
+    text-align: left;
+    cursor: pointer;
+    transition: background .18s ease;
+}
+
+.tournament-toggle:hover {
+    background: rgba(100, 116, 139, .14);
+}
+
+.tournament-card-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-width: 0;
+}
+
+.tournament-icon {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 46px;
+    border-radius: 13px;
+    background: rgba(100, 116, 139, .2);
+    font-size: 22px;
+}
+
+.tournament-card-copy {
+    min-width: 0;
+}
+
+.tournament-card-copy strong {
+    display: block;
+    overflow-wrap: anywhere;
+    font: 800 16px Manrope, sans-serif;
+    color: var(--white);
+}
+
+.tournament-card-copy small {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.tournament-status {
+    display: inline-flex;
+    align-items: center;
+    margin-top: 7px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: rgba(100, 116, 139, .24);
+    color: var(--white);
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: .06em;
+}
+
+.tournament-status.status-completed {
+    background: rgba(16, 185, 129, .2);
+    color: var(--green);
+}
+
+.tournament-status.status-cancelled {
+    background: rgba(255, 94, 30, .2);
+    color: var(--accent-orange);
+}
+
+.tournament-expand-icon {
+    flex: 0 0 auto;
+    color: var(--muted);
+    font-size: 21px;
+    transition: transform .2s ease;
+}
+
+.tournament-toggle[aria-expanded="true"] .tournament-expand-icon {
+    transform: rotate(180deg);
+}
+
+.tournament-details {
+    padding: 0 20px 20px;
+}
+
+.tournament-details[hidden] {
+    display: none;
+}
+
+.standings-scroll {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 11px;
+}
+
+.standings-table {
+    width: 100%;
+    min-width: 570px;
+    border-collapse: collapse;
+    text-align: center;
+    font-size: 12px;
+}
+
+.standings-table th {
+    padding: 12px 10px;
+    background: rgba(100, 116, 139, .2);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: .05em;
+    white-space: nowrap;
+}
+
+.standings-table td {
+    padding: 13px 10px;
+    border-top: 1px solid var(--line);
+    color: var(--white);
+    white-space: nowrap;
+}
+
+.standings-table tbody tr:first-child td {
+    background: rgba(100, 116, 139, .08);
+}
+
+.standings-table .standings-team {
+    text-align: left;
+    font-weight: 700;
+}
+
+.standings-table .standings-position {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.standings-table .standings-points {
+    color: var(--white);
+    font-weight: 800;
+}
+
+.standings-table .nrr-positive {
+    color: var(--green);
+    font-weight: 700;
+}
+
+.standings-table .nrr-negative {
+    color: var(--accent-orange);
+    font-weight: 700;
+}
+
+.tournament-table-note {
+    margin: 12px 2px 0;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.tournament-table-empty {
+    padding: 20px !important;
+    color: var(--muted) !important;
+    text-align: center;
+}
+
+@media(max-width:600px) {
+    .tournament-toggle {
+        padding: 16px;
+    }
+
+    .tournament-card-info {
+        gap: 11px;
+    }
+
+    .tournament-icon {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+        font-size: 19px;
+    }
+
+    .tournament-card-copy strong {
+        font-size: 14px;
+    }
+
+    .tournament-details {
+        padding: 0 11px 14px;
+    }
+}
+
+/* ========================================
+   CLUB WORKSPACE: TEAM CARDS + NESTED PLAYERS
+======================================== */
+
+.heading-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.team-card-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 14px;
+}
+
+.team-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color .18s ease, box-shadow .18s ease;
+}
+
+.team-card:hover,
+.team-card.is-open {
+    border-color: var(--blue);
+}
+
+.team-card.is-open {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .3);
+}
+
+.team-card-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-right: 10px;
+}
+
+.team-toggle {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: background .18s ease;
+}
+
+.team-toggle:hover {
+    background: var(--pale);
+}
+
+.team-toggle:focus-visible,
+.text-action:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: -2px;
+}
+
+.team-card-copy {
+    flex: 1;
+    min-width: 0;
+}
+
+.team-card-copy strong,
+.team-card-copy small {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.team-card-copy strong {
+    font-size: 12px;
+    color: var(--blue-deep);
+}
+
+.team-card-copy small {
+    margin-top: 3px;
+    font-size: 9px;
+    line-height: 1.5;
+    color: #89969d;
+}
+
+.team-count-chip {
+    flex-shrink: 0;
+    padding: 6px 9px;
+    border-radius: 999px;
+    background: #e7eef1;
+    color: #607783;
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: .1em;
+    white-space: nowrap;
+}
+
+.team-chevron {
+    flex-shrink: 0;
+    color: #8a99a1;
+    font-size: 18px;
+    line-height: 1;
+    transition: transform .2s ease;
+}
+
+.team-toggle[aria-expanded="true"] .team-chevron {
+    transform: rotate(180deg);
+}
+
+.team-roster {
+    padding: 2px 14px 12px;
+    border-top: 1px solid #edf0f1;
+    background: #fbfcfc;
+}
+
+.team-roster[hidden] {
+    display: none;
+}
+
+.roster-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.roster-row {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 10px 0;
+    border-bottom: 1px solid #edf0f1;
+    min-width: 0;
+}
+
+.roster-row:last-child {
+    border-bottom: 0;
+}
+
+.roster-row .player-number {
+    width: 34px;
+    height: 34px;
+}
+
+.roster-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.roster-info strong,
+.roster-info small {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
+.roster-info strong {
+    font-size: 11px;
+    color: var(--blue-deep);
+}
+
+.roster-info small {
+    margin-top: 3px;
+    font-size: 9px;
+    color: #89969d;
+}
+
+.roster-empty {
+    padding: 16px 4px 8px;
+    font-size: 10px;
+    color: #87959c;
+}
+
+.roster-add {
+    margin-top: 6px;
+    padding-left: 0;
+}
+
+@media(max-width:560px) {
+    .team-card-head {
+        flex-wrap: wrap;
+        padding-right: 0;
+    }
+
+    .team-toggle {
+        flex-basis: 100%;
+        padding: 12px;
+    }
+
+    .team-card-actions {
+        padding: 0 12px 10px;
+    }
+
+    .team-roster {
+        padding: 2px 12px 10px;
+    }
+
+    .heading-tags {
+        justify-content: flex-start;
+    }
+}
+
+/* ========================================
+   SHARED META CHIPS + TOURNAMENT CARDS
+======================================== */
+
+.meta-chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+}
+
+.meta-chips .tournament-status,
+.meta-chips .status-chip {
+    margin-top: 0;
+}
+
+.meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    max-width: 100%;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: rgba(100, 116, 139, .24);
+    color: var(--white);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.meta-chip b {
+    font-weight: 800;
+    color: var(--white);
+}
+
+.meta-chip.is-muted {
+    background: rgba(100, 116, 139, .16);
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.meta-chip.is-public {
+    background: rgba(16, 185, 129, .18);
+    color: var(--green);
+}
+
+/* Public Competition Centre cards: clearer hover/focus for the clickable button */
+.public-tournament-card {
+    transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.public-tournament-card:hover {
+    border-color: var(--blue);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .35);
+}
+
+.tournament-toggle:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: -3px;
+}
+
+.tournament-toggle .meta-chips {
+    margin-top: 9px;
+}
+
+/* Tournament cards on the club tournaments page */
+.admin-tournament-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    min-width: 0;
+}
+
+.admin-tournament-card:last-child {
+    margin-bottom: 0;
+}
+
+.admin-tournament-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.admin-tournament-body strong {
+    display: block;
+    font: 800 14px Manrope, sans-serif;
+    color: var(--blue-deep);
+    overflow-wrap: anywhere;
+}
+
+.admin-tournament-body small {
+    display: block;
+    margin-top: 6px;
+    font-size: 10px;
+    line-height: 1.6;
+    color: #89969d;
+    overflow-wrap: anywhere;
+}
+
+@media(max-width:560px) {
+    .admin-tournament-card {
+        flex-wrap: wrap;
+        padding: 14px;
+    }
+
+    .admin-tournament-body {
+        flex-basis: calc(100% - 56px);
     }
 }

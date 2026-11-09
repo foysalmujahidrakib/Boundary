@@ -25,7 +25,7 @@
             <div>
                 <div class="eyebrow"><span></span> CLUB WORKSPACE</div>
                 <h1 id="clubName">Loading club…</h1>
-                <p id="clubMeta">Teams and player directory</p>
+                <p id="clubMeta">Teams and squads</p>
             </div>
             <div class="club-heading-actions"><a class="btn btn-primary btn-small" id="tournamentLink"
                     href="tournaments.html">🏆 Tournaments</a><a class="btn btn-ghost btn-small" id="matchLink"
@@ -38,11 +38,15 @@
                     <div class="card-heading">
                         <div>
                             <div class="eyebrow"><span></span> SQUAD STRUCTURE</div>
-                            <h2>Teams</h2>
-                            <p>Create teams for your club and manage their squads.</p>
-                        </div><span class="soft-tag" id="teamCount">0 TEAMS</span>
+                            <h2>Teams &amp; squads</h2>
+                            <p>Select a team to see the players registered to it.</p>
+                        </div>
+                        <div class="heading-tags">
+                            <span class="soft-tag" id="teamCount">0 TEAMS</span>
+                            <span class="soft-tag" id="playerCount">0 PLAYERS</span>
+                        </div>
                     </div>
-                    <div id="teamList" class="management-list">
+                    <div id="teamList" class="team-card-list">
                         <div class="empty-state">Loading teams…</div>
                     </div>
                 </div>
@@ -71,18 +75,6 @@
                         <p class="form-message" id="teamMessage" role="status"></p>
                     </form>
                 </div>
-                <div class="card">
-                    <div class="card-heading">
-                        <div>
-                            <div class="eyebrow"><span></span> PLAYER DIRECTORY</div>
-                            <h2>Players</h2>
-                            <p>Maintain player profiles and assign them to a team.</p>
-                        </div><span class="soft-tag" id="playerCount">0 PLAYERS</span>
-                    </div>
-                    <div id="playerList" class="management-list">
-                        <div class="empty-state">Loading players…</div>
-                    </div>
-                </div>
                 <div class="card admin-only" id="playerFormCard">
                     <div class="card-heading">
                         <div>
@@ -104,18 +96,23 @@
                                     <option value="All-rounder">All-rounder</option>
                                     <option value="Wicketkeeper">Wicketkeeper</option>
                                 </select></div>
-                            <div class="field"><label for="playerTeam">Team</label><select id="playerTeam">
-                                    <option value="">Unassigned</option>
+                            <div class="field"><label for="playerTeam">Team</label><select id="playerTeam" required>
+                                    <option value="" disabled selected>Select a team…</option>
                                 </select></div>
                         </div>
                         <div class="form-two">
                             <div class="field"><label for="battingStyle">Batting style</label><select id="battingStyle">
                                     <option value="Right-handed">Right-handed</option>
                                     <option value="Left-handed">Left-handed</option>
-                                    <option value="Not specified">Not specified</option>
                                 </select></div>
-                            <div class="field"><label for="bowlingStyle">Bowling style</label><input id="bowlingStyle"
-                                    maxlength="60" placeholder="e.g. Right-arm fast"></div>
+                                <div class="field"><label for="bowlingStyle">Bowling style</label><select id="bowlingStyle">
+                                    <option value="Left-arm medium">None</option>
+                                    <option value="Right-arm fast">Right-arm fast</option>
+                                    <option value="Left-arm fast">Left-arm fast</option>
+                                    <option value="Right-arm medium">Right-arm Off spin</option>
+                                    <option value="Left-arm medium">Left-arm Off Spin</option>
+                                    <option value="Left-arm medium">Right-arm Leg Spin</option>
+                                </select></div>
                         </div>
                         <div class="form-actions"><button class="btn btn-primary" id="savePlayerBtn">Save player
                                 →</button><button class="btn btn-ghost hidden" type="button"

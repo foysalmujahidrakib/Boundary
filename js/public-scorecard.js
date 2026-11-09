@@ -10,6 +10,16 @@ const overs = (balls) => `${Math.floor((Number(balls) || 0) / 6)}.${(Number(ball
 const rate = (runs, balls) => balls ? (runs / balls * 100).toFixed(2) : "0.00";
 const economy = (runs, balls) => balls ? (runs / (balls / 6)).toFixed(2) : "0.00";
 
+function publicStatusLabel(status) {
+  const normalized = String(status || "").trim().toLowerCase();
+
+  if (normalized === "completed") return "MATCH COMPLETED";
+  if (normalized === "abandoned") return "MATCH ABANDONED";
+  if (normalized === "cancelled") return "MATCH CANCELLED";
+
+  return "LIVE SCORE";
+}
+
 function playerName(data, id) { return data.playerNames?.[id] || "Player"; }
 function teamName(data, id) { return data.teamNames?.[id] || "Team"; }
 
@@ -72,7 +82,7 @@ function render(data) {
   const innings = data.innings || [];
   $("publicMatchTitle").textContent = data.title || "Cricket match";
   $("publicMatchMeta").textContent = [data.matchDate, data.startTime, data.venue, data.format].filter(Boolean).join(" · ");
-  $("publicStatus").textContent = data.status === "completed" ? "MATCH COMPLETED" : "LIVE SCORE";
+  $("publicStatus").textContent = publicStatusLabel(data.status);
   $("publicResult").textContent = data.result || "";
 
   $("publicHeadlineScores").innerHTML = innings.map((inn) => `

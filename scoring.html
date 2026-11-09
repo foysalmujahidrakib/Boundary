@@ -13,14 +13,17 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         :root {
-            --olive: #890c0c;
-            --olive-dark: #6f8c4c;
-            --ink: #17202a;
-            --muted: #66717b;
-            --canvas: #d9d9d9;
-            --panel: #c8bdbd;
-            --yellow: #fff77a;
-            --bluegrey: #485b63
+            --olive: #00FFC2;
+            --olive-dark: #00d8a5;
+            --ink: #ffffff;
+            --muted: #64748B;
+            --canvas: #0B121E;
+            --panel: #111C2D;
+            --yellow: rgba(0, 255, 194, .14);
+            --bluegrey: #64748B;
+            --alert: #FF5E1E;
+            --positive: #10B981;
+            --line: rgba(100, 116, 139, .35)
         }
 
         * {
@@ -40,7 +43,7 @@
 
         .score-hero {
             background: var(--olive);
-            color: #fff;
+            color: #04131e;
             border-radius: 22px;
             padding: 24px 28px;
             margin-bottom: 14px
@@ -60,7 +63,7 @@
         }
 
         .score-meta {
-            color: #eef3e8
+            color: #094634
         }
 
         .score-total {
@@ -74,12 +77,18 @@
         }
 
         .score-card {
-            background: #f5f5f2;
+            background: var(--panel);
             border: 0;
             border-radius: 20px;
             padding: 20px;
             margin-bottom: 16px;
-            box-shadow: 0 3px 12px #0000000a
+            box-shadow: 0 3px 16px rgba(0, 0, 0, .28)
+        }
+
+        .score-card h2,
+        .team-name,
+        .score-big {
+            color: var(--ink)
         }
 
         .score-card h2 {
@@ -101,7 +110,7 @@
             background: var(--olive);
             font: 800 40px Anton, Manrope, sans-serif;
             cursor: pointer;
-            color: white;
+            color: #04131e;
             transition: .15s
         }
 
@@ -121,7 +130,8 @@
         }
 
         .score-btn.boundary {
-            background: var(--olive)
+            background: var(--alert);
+            color: #2a0f05
         }
 
         .extra-controls {
@@ -148,7 +158,7 @@
             display: block;
             font-size: 12px;
             font-weight: 700;
-            color: #536579;
+            color: var(--muted);
             margin-bottom: 6px
         }
 
@@ -159,9 +169,10 @@
         .modal-field select {
             width: 100%;
             padding: 11px;
-            border: 1px solid #d6e0e9;
+            border: 1px solid var(--line);
             border-radius: 9px;
-            background: #fff
+            background: #0f1a2b;
+            color: var(--ink)
         }
 
         .score-table {
@@ -174,11 +185,11 @@
         .score-table td {
             text-align: left;
             padding: 9px 7px;
-            border-bottom: 1px solid #edf1f5
+            border-bottom: 1px solid var(--line)
         }
 
         .score-table th {
-            color: #64748b;
+            color: var(--muted);
             font-size: 11px;
             text-transform: uppercase
         }
@@ -187,8 +198,8 @@
             display: inline-block;
             padding: 6px 11px;
             border-radius: 99px;
-            background: #e6eedb;
-            color: #3f5d2b;
+            background: rgba(16, 185, 129, .2);
+            color: var(--positive);
             font-size: 11px;
             font-weight: 800
         }
@@ -224,25 +235,25 @@
             border-radius: 50%;
             display: grid;
             place-items: center;
-            background: #e8edf0;
+            background: rgba(100, 116, 139, .24);
             font-size: 12px;
             font-weight: 800;
-            color: #26343b
+            color: var(--ink)
         }
 
         .ball-chip.boundary {
-            background: #d9eefc;
-            color: #155b8c
+            background: rgba(255, 94, 30, .2);
+            color: var(--alert)
         }
 
         .ball-chip.wicket {
-            background: #ffe0df;
-            color: #a72f2a
+            background: rgba(255, 94, 30, .25);
+            color: var(--alert)
         }
 
         .ball-chip.extra {
-            background: #ffedc2;
-            color: #80520c
+            background: rgba(0, 255, 194, .16);
+            color: var(--olive)
         }
 
         .ball-chip.penalty {
@@ -254,7 +265,8 @@
             background: var(--panel);
             border-radius: 24px;
             padding: 20px 24px;
-            margin-bottom: 14px
+            margin-bottom: 14px;
+            border: 1px solid var(--line)
         }
 
         .score-summary-top {
@@ -274,13 +286,13 @@
         }
 
         .score-big .slash {
-            color: #e44747
+            color: var(--alert)
         }
 
         .stat-bubble {
             display: inline-block;
             background: var(--olive);
-            color: #101810;
+            color: #04131e;
             border-radius: 50px;
             padding: 9px 18px;
             font-weight: 700
@@ -306,7 +318,7 @@
 
         .player-highlight small {
             display: block;
-            color: #59604a;
+            color: var(--muted);
             font-size: 10px;
             font-weight: 700
         }
@@ -324,7 +336,7 @@
             grid-template-columns: minmax(100px, 1.5fr) repeat(5, minmax(38px, .7fr));
             gap: 6px;
             text-align: center;
-            color: #46515a;
+            color: var(--muted);
             font-size: 11px;
             font-weight: 800;
             padding: 0 18px
@@ -335,7 +347,7 @@
             grid-template-columns: minmax(100px, 1.5fr) repeat(4, minmax(38px, .7fr));
             gap: 6px;
             text-align: center;
-            color: #46515a;
+            color: var(--muted);
             font-size: 11px;
             font-weight: 800;
             padding: 0 18px
@@ -377,8 +389,8 @@
         .notice-box {
             padding: 12px 14px;
             border-radius: 10px;
-            background: #fff8e6;
-            color: #77551a;
+            background: rgba(255, 94, 30, .14);
+            color: var(--alert);
             margin-bottom: 14px
         }
 
@@ -403,10 +415,14 @@
 
         .score-modal {
             width: min(480px, 100%);
-            background: #fff;
+            background: var(--panel);
             border-radius: 20px;
             padding: 22px;
             box-shadow: 0 20px 70px #0004
+        }
+
+        .score-modal h2 {
+            color: var(--ink)
         }
 
         .score-modal h2 {
@@ -521,7 +537,7 @@
                 </div>
                 <div style="text-align:right">
                     <div class="score-total" id="heroScore">0/0</div>
-                    <div class="score-meta" id="oversText">0.0 overs</div>
+                    <div class="score-meta" id="oversText">0.0</div>
                 </div>
             </div>
         </section>
@@ -572,7 +588,7 @@
                     </div>
                     <div id="batterHighlights"></div>
                     <div class="bowler-head" style="margin-top:12px">
-                        <span></span><span>OVERS</span><span>RUN</span><span>WKT</span><span>ECO</span>
+                        <span></span><span></span><span></span><span></span><span></span>
                     </div>
                     <div id="bowlerHighlight" class="bowler-highlight"><span
                             class="player-name">Bowler</span><span>0.0</span><span>0</span><span>0</span><span>0.00</span>

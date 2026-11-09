@@ -12,153 +12,172 @@
     rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <style>
+    :root {
+      --theme-bg: #0B121E;
+      --theme-surface: #111C2D;
+      --theme-accent: #00FFC2;
+      --theme-alert: #FF5E1E;
+      --theme-text: #FFFFFF;
+      --theme-muted: #64748B;
+      --theme-positive: #10B981;
+      --theme-border: rgba(100, 116, 139, .35);
+    }
+
     .public-report {
       max-width: 1080px;
       margin: 34px auto;
-      padding: 0 22px 50px
+      padding: 0 22px 50px;
     }
 
     .public-report-hero {
-      background: #182c43;
-      color: #fff;
+      background: var(--theme-surface);
+      color: var(--theme-text);
       border-radius: 18px;
       padding: 26px;
-      margin-bottom: 20px
+      margin-bottom: 20px;
+      border: 1px solid var(--theme-border);
     }
 
     .public-report-hero h1 {
       font: 800 26px Manrope, sans-serif;
-      margin: 10px 0
+      margin: 10px 0;
     }
 
     .public-report-meta {
-      color: #c8d5e1;
-      font-size: 13px
+      color: var(--theme-muted);
+      font-size: 13px;
     }
 
     .public-report-result {
       font-weight: 800;
-      color: #b9e5ca;
-      margin-top: 14px
+      color: var(--theme-positive);
+      margin-top: 14px;
     }
 
     .public-report-scores {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 20px
+      margin-top: 20px;
     }
 
     .public-report-team {
-      background: #ffffff12;
-      border: 1px solid #ffffff25;
+      background: rgba(100, 116, 139, .16);
+      border: 1px solid var(--theme-border);
       border-radius: 12px;
       padding: 14px 16px;
-      min-width: 180px
+      min-width: 180px;
     }
 
     .public-report-team strong {
       display: block;
       font: 800 24px Manrope;
-      margin-top: 5px
+      margin-top: 5px;
+      color: var(--theme-text);
     }
 
     .public-report-card {
-      background: #fff;
-      border: 1px solid #e1e8ef;
+      background: var(--theme-surface);
+      border: 1px solid var(--theme-border);
       border-radius: 16px;
       padding: 22px;
-      margin: 18px 0
+      margin: 18px 0;
     }
 
     .public-report-card h2 {
       font: 700 18px Manrope;
-      margin: 0 0 14px
+      margin: 0 0 14px;
+      color: var(--theme-text);
     }
 
     .public-report-card h3 {
       font: 700 14px Manrope;
-      margin: 18px 0 8px
+      margin: 18px 0 8px;
+      color: var(--theme-text);
     }
 
     .public-table-wrap {
-      overflow-x: auto
+      overflow-x: auto;
     }
 
     .public-table {
       width: 100%;
       border-collapse: collapse;
       min-width: 480px;
-      font-size: 13px
+      font-size: 13px;
     }
 
     .public-table th,
     .public-table td {
       padding: 10px 9px;
       text-align: right;
-      border-bottom: 1px solid #edf1f5;
-      white-space: nowrap
+      border-bottom: 1px solid var(--theme-border);
+      white-space: nowrap;
+      color: var(--theme-text);
     }
 
     .public-table th:first-child,
     .public-table td:first-child {
-      text-align: left
+      text-align: left;
     }
 
     .public-table th {
       font-size: 10px;
       letter-spacing: .06em;
       text-transform: uppercase;
-      color: #64748b;
-      background: #f8fafc
+      color: var(--theme-muted);
+      background: rgba(100, 116, 139, .16);
     }
 
     .public-table tfoot td {
       font-weight: 800;
-      background: #f8fafc
+      background: rgba(100, 116, 139, .12);
     }
 
     .public-muted {
       font-size: 12px;
-      color: #718096
+      color: var(--theme-muted);
     }
 
     .public-empty {
       padding: 24px;
       text-align: center;
-      background: #f8fafc;
+      background: rgba(100, 116, 139, .12);
       border-radius: 12px;
-      color: #718096
+      color: var(--theme-muted);
+      border: 1px solid var(--theme-border);
     }
 
     .public-summary {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px
+      gap: 12px;
     }
 
     .public-summary-item {
       padding: 14px;
       border-radius: 11px;
-      background: #c4c8cc
+      background: rgba(100, 116, 139, .16);
+      border: 1px solid var(--theme-border);
     }
 
     .public-summary-item small {
       display: block;
-      color: #64748b
+      color: var(--theme-muted);
     }
 
     .public-summary-item strong {
-      font: 800 21px Manrope
+      font: 800 21px Manrope;
+      color: var(--theme-text);
     }
 
     @media(max-width:640px) {
       .public-report-hero h1 {
-        font-size: 22px
+        font-size: 22px;
       }
 
       .public-report-card {
-        padding: 16px
+        padding: 16px;
       }
     }
   </style>

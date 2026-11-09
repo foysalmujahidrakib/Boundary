@@ -56,6 +56,29 @@ const current = () => score?.innings?.[activeIndex] || null;
 
 const legalBall = (kind) => !["wide", "no_ball"].includes(kind);
 
+function normalizeMatchStatus(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+function secondInningsCompleted(innings) {
+  const second = innings?.[1];
+  return Boolean(second && second.completed === true);
+}
+
+function derivePublicMatchStatus({ innings = [], matchStatus = "" } = {}) {
+  const normalized = normalizeMatchStatus(matchStatus);
+
+  if (normalized === "completed") {
+    return "completed";
+  }
+
+  if (normalized === "abandoned" || normalized === "cancelled") {
+    return normalized;
+  }
+
+  return secondInningsCompleted(innings) ? "completed" : "live";
+}
+
 
 // ========================================
 // GENERAL FUNCTIONS
@@ -501,12 +524,10 @@ async function saveDelivery(kind, requestedRuns = 0, wicket = false, options = {
 async function publishPublicScore() {
   if (!canScore() || !match || !score?.innings?.length) return;
 
-  const lastInnings =
-    score.innings[score.innings.length - 1];
-
-  const isCompleted =
-    score.innings.length >= 2 &&
-    lastInnings.completed === true;
+  const publicStatus = derivePublicMatchStatus({
+    innings: score.innings,
+    matchStatus: match.status
+  });
 
   const teamNames = Object.fromEntries(
     teams.map((team) => [
@@ -525,6 +546,7 @@ async function publishPublicScore() {
   const publicData = {
     matchId,
     clubId,
+    tournamentId: match.tournamentId || null,
 
     title: match.title ||
       `${teamName(match.teamAId)} vs ${teamName(match.teamBId)}`,
@@ -544,7 +566,8 @@ async function publishPublicScore() {
     innings: score.innings,
     result: matchResult(),
 
-    status: isCompleted ? "completed" : "live",
+    status: publicStatus,
+    matchStatus: normalizeMatchStatus(match.status),
 
     updatedAt: serverTimestamp()
   };
@@ -554,6 +577,76 @@ async function publishPublicScore() {
     publicData,
     { merge: true }
   );
+}
+
+
+async function repairClubPublicStatuses() {
+  if (!canScore() || !clubId) return;
+
+  try {
+    const [livePublicSnap, clubMatchSnap] = await Promise.all([
+      getDocs(
+        query(
+          collection(db, "publicMatchScores"),
+          where("status", "==", "live")
+        )
+      ),
+      getDocs(
+        query(
+          collection(db, "matches"),
+          where("clubId", "==", clubId)
+        )
+      )
+    ]);
+
+    const matchStatusById = new Map(
+      clubMatchSnap.docs.map((matchDoc) => [
+        matchDoc.id,
+        normalizeMatchStatus(matchDoc.data()?.status)
+      ])
+    );
+
+    const updates = [];
+
+    for (const publicDoc of livePublicSnap.docs) {
+      const data = publicDoc.data() || {};
+
+      if (data.clubId !== clubId) continue;
+
+      const linkedMatchId = data.matchId || publicDoc.id;
+      const linkedMatchStatus =
+        matchStatusById.get(linkedMatchId) || normalizeMatchStatus(data.matchStatus);
+
+      const expectedStatus = derivePublicMatchStatus({
+        innings: data.innings || [],
+        matchStatus: linkedMatchStatus
+      });
+
+      if (expectedStatus === "live" && normalizeMatchStatus(data.matchStatus) === linkedMatchStatus) {
+        continue;
+      }
+
+      updates.push(
+        setDoc(
+          doc(db, "publicMatchScores", publicDoc.id),
+          {
+            status: expectedStatus,
+            matchStatus: linkedMatchStatus,
+            updatedAt: serverTimestamp()
+          },
+          { merge: true }
+        )
+      );
+    }
+
+    if (updates.length) {
+      await Promise.all(updates);
+      console.info(`Public score status repair updated ${updates.length} record(s) for club ${clubId}.`);
+    }
+
+  } catch (error) {
+    console.warn("Could not repair stale public match statuses:", error);
+  }
 }
 
 
@@ -1192,6 +1285,10 @@ if (!isConfigured || !auth || !db) {
       }
 
       await loadScore();
+
+      if (canScore()) {
+        await repairClubPublicStatuses();
+      }
 
     } catch (e) {
 

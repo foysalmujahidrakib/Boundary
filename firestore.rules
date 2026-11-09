@@ -109,6 +109,34 @@ service cloud.firestore {
     }
 
 
+    // Public tournament summaries used by the homepage standings.
+    // Only an administrator of the owning club can publish or remove them.
+    match /publicTournaments/{tournamentId} {
+      allow read: if true;
+      allow create: if signedIn()
+        && isClubAdmin(request.resource.data.clubId)
+        && request.resource.data.name is string
+        && request.resource.data.teamIds is list
+        && request.resource.data.teamNames is map
+        && request.resource.data.status in ['planned', 'ongoing', 'completed', 'cancelled']
+        && request.resource.data.keys().hasOnly([
+          'clubId', 'name', 'season', 'format', 'startDate', 'endDate',
+          'venue', 'status', 'teamIds', 'teamNames', 'updatedAt'
+        ]);
+      allow update: if signedIn()
+        && isClubAdmin(resource.data.clubId)
+        && request.resource.data.clubId == resource.data.clubId
+        && request.resource.data.name is string
+        && request.resource.data.teamIds is list
+        && request.resource.data.teamNames is map
+        && request.resource.data.status in ['planned', 'ongoing', 'completed', 'cancelled']
+        && request.resource.data.keys().hasOnly([
+          'clubId', 'name', 'season', 'format', 'startDate', 'endDate',
+          'venue', 'status', 'teamIds', 'teamNames', 'updatedAt'
+        ]);
+      allow delete: if signedIn() && isClubAdmin(resource.data.clubId);
+    }
+
     // Public, read-only score snapshots. The scorer publishes only match details,
     // team/player display names and scorecard data here; private club records remain private.
     match /publicMatchScores/{matchId} {

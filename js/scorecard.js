@@ -1,6 +1,6 @@
 import { auth, db, isConfigured } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
-import { collection, doc, getDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -18,6 +18,147 @@ const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({
 const overs = n => `${Math.floor((n || 0) / 6)}.${(n || 0) % 6}`;
 const rate = (runs, balls) => balls ? ((runs / balls) * 100).toFixed(2) : "0.00";
 const economy = (runs, balls) => balls ? ((runs / (balls / 6))).toFixed(2) : "0.00";
+
+function statusLabelForInnings(innings, matchStatus) {
+    const status = String(matchStatus || "").trim().toLowerCase();
+    if (status === "completed" || status === "abandoned" || status === "cancelled") return "RESULT";
+    if (!innings.length) return "LIVE";
+    if (innings.length === 1 && innings[0]?.completed) return "INNINGS BREAK";
+    return "LIVE";
+}
+
+function dismissalText(delivery, playerNames) {
+    const type = String(delivery.dismissalType || "").trim();
+    if (!type) {
+        return `b ${playerNames[delivery.bowlerId] || "Unknown bowler"}`;
+    }
+
+    if (type === "run_out") return "run out";
+    if (type === "retired_hurt") return "retired hurt";
+
+    if (type === "caught") {
+        return `c ? b ${playerNames[delivery.bowlerId] || "Unknown bowler"}`;
+    }
+
+    if (type === "bowled") {
+        return `b ${playerNames[delivery.bowlerId] || "Unknown bowler"}`;
+    }
+
+    return type.replaceAll("_", " ");
+}
+
+function dismissalLookup(inn, playerNames) {
+    const outByBatterId = {};
+
+    for (const delivery of inn.deliveries || []) {
+        if (!delivery.wicket) continue;
+
+        const dismissedId = delivery.dismissedBatterId || delivery.strikerId;
+        if (!dismissedId || outByBatterId[dismissedId]) continue;
+
+        outByBatterId[dismissedId] = dismissalText(delivery, playerNames);
+    }
+
+    return outByBatterId;
+}
+
+function battingRowsForPublic(inn, playerNames) {
+    const ids = [...new Set((inn.deliveries || []).map(d => d.strikerId))];
+    const dismissalById = dismissalLookup(inn, playerNames);
+
+    return ids.map((id) => {
+        const values = inn.batters?.[id] || { runs: 0, balls: 0, fours: 0, sixes: 0 };
+        const isActive = !inn.completed && (id === inn.strikerId || id === inn.nonStrikerId);
+
+        return {
+            playerId: id,
+            name: playerNames[id] || "Unknown player",
+            dismissal: dismissalById[id] || "not out",
+            runs: values.runs || 0,
+            balls: values.balls || 0,
+            fours: values.fours || 0,
+            sixes: values.sixes || 0,
+            strikeRate: rate(values.runs || 0, values.balls || 0),
+            isActive
+        };
+    });
+}
+
+function bowlingRowsForPublic(inn, playerNames) {
+    const ids = [...new Set((inn.deliveries || []).map(d => d.bowlerId))];
+
+    return ids.map((id) => {
+        const values = inn.bowlers?.[id] || { runs: 0, wickets: 0, legalBalls: 0 };
+        return {
+            playerId: id,
+            name: playerNames[id] || "Unknown player",
+            overs: overs(values.legalBalls || 0),
+            runs: values.runs || 0,
+            wickets: values.wickets || 0,
+            economy: economy(values.runs || 0, values.legalBalls || 0)
+        };
+    });
+}
+
+function teamNameFrom(teams, id) {
+    return teams?.[id] || "Team";
+}
+
+function inningsSummaryLabel(inn, teams) {
+    return `${teamNameFrom(teams, inn.battingTeamId)} ${inn.total || 0}/${inn.wickets || 0} (${overs(inn.legalBalls)} ov)`;
+}
+
+export function toPublicScorecardViewModel(publicData) {
+    if (!publicData) return null;
+
+    const innings = publicData.innings || [];
+    const teams = publicData.teamNames || {};
+    const players = publicData.playerNames || {};
+    const formatOvers = Number(publicData.overs || 0);
+    const formatText = publicData.format || "Match";
+
+    const inningTabs = innings.map((inn, index) => ({
+        index,
+        key: `${publicData.matchId || "match"}-${index + 1}`,
+        label: `${teamNameFrom(teams, inn.battingTeamId)} ${inn.total || 0}/${inn.wickets || 0}`,
+        status: inn.completed ? "Complete" : "Batting"
+    }));
+
+    const inningsDetails = innings.map((inn, index) => ({
+        index,
+        key: `${publicData.matchId || "match"}-innings-${index + 1}`,
+        heading: `${teamNameFrom(teams, inn.battingTeamId)} Innings`,
+        summary: inningsSummaryLabel(inn, teams),
+        battingRows: battingRowsForPublic(inn, players),
+        bowlingRows: bowlingRowsForPublic(inn, players),
+        completed: Boolean(inn.completed)
+    }));
+
+    return {
+        matchId: publicData.matchId,
+        title: publicData.title || "Live Match",
+        meta: [publicData.matchDate, publicData.startTime, publicData.venue].filter(Boolean).join(" · "),
+        status: statusLabelForInnings(innings, publicData.status),
+        result: publicData.result || "",
+        formatLabel: `Format: ${formatText}${formatOvers ? ` (${formatOvers} Overs)` : ""}`,
+        inningTabs,
+        inningsDetails
+    };
+}
+
+export function subscribePublicScorecardByMatchId(matchIdValue, onData, onError) {
+    if (!matchIdValue || !isConfigured || !db) {
+        if (typeof onData === "function") onData(null);
+        return () => {};
+    }
+
+    return onSnapshot(doc(db, "publicMatchScores", matchIdValue), (snapshot) => {
+        const data = snapshot.exists() ? snapshot.data() : null;
+        if (typeof onData === "function") onData(data);
+    }, (error) => {
+        if (typeof onError === "function") onError(error);
+    });
+}
 
 let user = null;
 let match = null;
@@ -222,63 +363,65 @@ function render() {
         </div>`).join("");
 }
 
-$("printBtn").addEventListener("click", () => window.print());
-$("printBottom").addEventListener("click", () => window.print());
+if (typeof document !== "undefined" && $("matchTitle")) {
+    $("printBtn")?.addEventListener("click", () => window.print());
+    $("printBottom")?.addEventListener("click", () => window.print());
 
-$("signOutBtn").addEventListener("click", async () => {
-    if (auth) await signOut(auth);
-    location.href = "index.html";
-});
-
-if (!isConfigured || !auth || !db) {
-    fail("Firebase is not configured. Copy your working Stage 6 js/firebase.js into this project.");
-} else if (!clubId || !matchId) {
-    fail("No match was selected. Open Scorecard from your club's Match Centre.");
-} else {
-    onAuthStateChanged(auth, async u => {
-        if (!u) { 
-            location.href = "index.html"; 
-            return; 
-        }
-        user = u;
-        $("userEmail").textContent = u.email || "";
-        $("backMatches").href = `matches.html?clubId=${encodeURIComponent(clubId)}`;
-        $("matchesLink").href = $("backMatches").href;
-        $("liveScoringLink").href = `scoring.html?clubId=${encodeURIComponent(clubId)}&matchId=${encodeURIComponent(matchId)}`;
-        
-        try {
-            const membership = await getDoc(doc(db, "memberships", `${u.uid}_${clubId}`));
-            if (!membership.exists() || membership.data().status !== "active") {
-                fail("You do not have access to this club.");
-                return;
-            }
-            
-            const [m, t, p, s] = await Promise.all([
-                getDoc(doc(db, "matches", matchId)),
-                getDocs(query(collection(db, "teams"), where("clubId", "==", clubId))),
-                getDocs(query(collection(db, "players"), where("clubId", "==", clubId))),
-                getDoc(doc(db, "matchScores", matchId))
-            ]);
-
-            if (!m.exists() || m.data().clubId !== clubId) {
-                fail("This match could not be found in the selected club.");
-                return;
-            }
-
-            match = m.data();
-            teams = t.docs.map(d => ({ id: d.id, ...d.data() }));
-            players = p.docs.map(d => ({ id: d.id, ...d.data() }));
-            score = s.exists() ? s.data() : null;
-
-            const a = nameTeam(match.teamAId);
-            const b = nameTeam(match.teamBId);
-            $("matchTitle").textContent = match.title || `${a} vs ${b}`;
-            $("matchMeta").textContent = [match.matchDate, match.startTime, match.venue, match.format].filter(Boolean).join(" · ");
-            
-            render();
-        } catch (e) {
-            console.error(e);
-            fail(e.code === "permission-denied" ? "Access denied. Publish the Stage 6 Firestore rules." : "Could not load scorecard data. Check your Firebase setup.");
-        }
+    $("signOutBtn")?.addEventListener("click", async () => {
+        if (auth) await signOut(auth);
+        location.href = "index.html";
     });
+
+    if (!isConfigured || !auth || !db) {
+        fail("Firebase is not configured. Copy your working Stage 6 js/firebase.js into this project.");
+    } else if (!clubId || !matchId) {
+        fail("No match was selected. Open Scorecard from your club's Match Centre.");
+    } else {
+        onAuthStateChanged(auth, async u => {
+            if (!u) {
+                location.href = "index.html";
+                return;
+            }
+            user = u;
+            $("userEmail").textContent = u.email || "";
+            $("backMatches").href = `matches.html?clubId=${encodeURIComponent(clubId)}`;
+            $("matchesLink").href = $("backMatches").href;
+            $("liveScoringLink").href = `scoring.html?clubId=${encodeURIComponent(clubId)}&matchId=${encodeURIComponent(matchId)}`;
+
+            try {
+                const membership = await getDoc(doc(db, "memberships", `${u.uid}_${clubId}`));
+                if (!membership.exists() || membership.data().status !== "active") {
+                    fail("You do not have access to this club.");
+                    return;
+                }
+
+                const [m, t, p, s] = await Promise.all([
+                    getDoc(doc(db, "matches", matchId)),
+                    getDocs(query(collection(db, "teams"), where("clubId", "==", clubId))),
+                    getDocs(query(collection(db, "players"), where("clubId", "==", clubId))),
+                    getDoc(doc(db, "matchScores", matchId))
+                ]);
+
+                if (!m.exists() || m.data().clubId !== clubId) {
+                    fail("This match could not be found in the selected club.");
+                    return;
+                }
+
+                match = m.data();
+                teams = t.docs.map(d => ({ id: d.id, ...d.data() }));
+                players = p.docs.map(d => ({ id: d.id, ...d.data() }));
+                score = s.exists() ? s.data() : null;
+
+                const a = nameTeam(match.teamAId);
+                const b = nameTeam(match.teamBId);
+                $("matchTitle").textContent = match.title || `${a} vs ${b}`;
+                $("matchMeta").textContent = [match.matchDate, match.startTime, match.venue, match.format].filter(Boolean).join(" · ");
+
+                render();
+            } catch (e) {
+                console.error(e);
+                fail(e.code === "permission-denied" ? "Access denied. Publish the Stage 6 Firestore rules." : "Could not load scorecard data. Check your Firebase setup.");
+            }
+        });
+    }
 }

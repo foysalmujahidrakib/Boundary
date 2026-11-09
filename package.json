@@ -2,13 +2,19 @@
   "name": "boundary-cricket-management",
   "version": "0.8.0",
   "private": true,
-  "description": "Boundary cricket scoring and tournament management \u2014 Stage 8 testing and deployment readiness",
+  "description": "Boundary cricket scoring and tournament management — Stage 8 testing and deployment readiness",
   "scripts": {
     "start": "npx serve .",
-    "admin:bootstrap": "node scripts/bootstrap-admin.js"
+    "admin:bootstrap": "node scripts/bootstrap-admin.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "serve": "^14.2.4"
+    "@tailwindcss/vite": "^4.3.5",
+    "serve": "^14.2.4",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.6"
   },
   "dependencies": {
     "firebase-admin": "^13.0.0"

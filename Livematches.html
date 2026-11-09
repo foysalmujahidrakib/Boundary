@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>boundary . Modern Cricket Live Dashboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        petrol: {
+                            900: '#0B121E',
+                            800: '#111C2D',
+                            700: '#1A293E',
+                            600: '#253852',
+                        },
+                        mint: {
+                            400: '#00FFC2',
+                            500: '#00E0AB',
+                            glow: 'rgba(0, 255, 194, 0.25)'
+                        },
+                        blaze: {
+                            500: '#FF5E1E',
+                            600: '#E04A0E',
+                            glow: 'rgba(255, 94, 30, 0.3)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B121E;
+            color: #F3F4F6;
+            overflow-x: hidden;
+        }
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B121E;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1A293E;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00FFC2;
+        }
+        .glass-panel {
+            background: rgba(17, 28, 45, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+    <!-- Realtime public live-match feed -->
+    <script type="module" src="js/live-match-centre.js"></script>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-mint-400 selection:text-petrol-900">
+
+    <!-- APP HEADER & TICKER BANNER -->
+    <header class="sticky top-0 z-50 bg-petrol-900/95 backdrop-blur-md border-b border-white/10">
+        <!-- Live Matches Quick Ticker Bar -->
+        <div class="bg-petrol-800 border-b border-white/5 px-4 py-2 text-xs overflow-x-auto scrollbar-none flex items-center space-x-4">
+            <span class="text-mint-400 font-bold tracking-wider flex items-center shrink-0 uppercase text-[11px]">
+                <span class="w-2 h-2 rounded-full bg-mint-400 animate-ping mr-1.5"></span> LIVE MATCHES
+            </span>
+            <div class="h-4 w-px bg-white/10 shrink-0"></div>
+            
+            <!-- Dynamic Ticker List Container -->
+            <div id="ticker-matches-list" class="flex items-center space-x-3 shrink-0">
+                <span class="text-gray-400 text-xs italic">Loading live matches…</span>
+            </div>
+        </div>
+
+        <!-- Main Nav Header -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Brand Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-mint-400 to-blaze-500 flex items-center justify-center shadow-lg shadow-mint-400/20">
+                        <i class="fa-solid fa-bolt text-petrol-900 text-xl font-extrabold"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-1.5">
+                            <span class="text-xl font-black tracking-tight text-white uppercase italic">boun<span class="text-mint-400">dary</span></span>
+                            <span class="bg-blaze-500/20 border border-blaze-500/40 text-blaze-500 text-[10px] font-bold px-1.5 py-0.5 rounded uppercase">PRO</span>
+                        </div>
+                        <p class="text-[10px] text-gray-400 tracking-wider">GLOBAL CRICKET NETWORK</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Tabs -->
+                <nav class="hidden md:flex space-x-1 bg-petrol-800/80 p-1.5 rounded-xl border border-white/5">
+                    <button onclick="switchTab('live')" id="tab-btn-live" class="nav-tab active-tab px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center space-x-2 bg-mint-400 text-petrol-900 shadow-md">
+                        <i class="fa-solid fa-tower-broadcast text-xs"></i>
+                        <span>Live Match</span>
+                    </button>
+                    <button onclick="switchTab('scorecard')" id="tab-btn-scorecard" class="nav-tab px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center space-x-2 text-gray-300 hover:text-white hover:bg-petrol-700/50">
+                        <i class="fa-solid fa-list-check text-xs"></i>
+                        <span>Full Scorecard</span>
+                    </button>
+                    <button onclick="switchTab('overs')" id="tab-btn-overs" class="nav-tab px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center space-x-2 text-gray-300 hover:text-white hover:bg-petrol-700/50">
+                        <i class="fa-solid fa-timeline text-xs"></i>
+                        <span>Overs Timeline</span>
+                    </button>
+                    <button onclick="switchTab('stats')" id="tab-btn-stats" class="nav-tab px-5 py-2 rounded-lg text-sm font-semibold transition flex items-center space-x-2 text-gray-300 hover:text-white hover:bg-petrol-700/50">
+                        <i class="fa-solid fa-chart-pie text-xs"></i>
+                        <span>Stats & Match Info</span>
+                    </button>
+                </nav>
+
+                <!-- Controls & Audio Toggle -->
+                <div class="flex items-center space-x-3">
+                    <button id="sound-toggle-btn" onclick="toggleSound()" class="p-2.5 rounded-xl bg-petrol-800 hover:bg-petrol-700 border border-white/10 text-gray-300 hover:text-mint-400 transition" title="Toggle Sound Effects">
+                        <i id="sound-icon" class="fa-solid fa-volume-high"></i>
+                    </button>
+                    <div class="hidden sm:flex items-center space-x-2 text-xs bg-petrol-800 border border-white/10 px-3 py-1.5 rounded-xl text-gray-300">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="font-medium">Feed: <strong class="text-white">Realtime</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN BODY CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-grow">
+
+        <!-- ==================== VIEW 1: LIVE MATCH DASHBOARD ==================== -->
+        <div id="view-live" class="tab-view space-y-6">
+
+            <!-- DYNAMIC HERO SCOREBOARD CARD -->
+            <div id="dynamic-hero-container" class="relative rounded-3xl bg-gradient-to-b from-petrol-800 to-petrol-900 border border-white/10 p-6 md:p-8 shadow-2xl overflow-hidden">
+                <div class="text-center py-12 text-gray-400">
+                    <i class="fa-solid fa-circle-notch fa-spin text-2xl text-mint-400 mb-2"></i>
+                    <p>Loading live match telemetry…</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ==================== VIEW 2: FULL SCORECARD ==================== -->
+        <div id="view-scorecard" class="tab-view hidden space-y-6">
+            <div class="bg-petrol-800/80 border border-white/10 rounded-2xl p-6 glass-panel" id="dynamic-scorecard-container">
+                <p class="text-gray-400 text-sm text-center py-8">Select a live match to inspect full scorecards.</p>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 3: OVERS TIMELINE ==================== -->
+        <div id="view-overs" class="tab-view hidden space-y-6">
+            <div class="bg-petrol-800/80 border border-white/10 rounded-2xl p-6 glass-panel" id="dynamic-overs-container">
+                <p class="text-gray-400 text-sm text-center py-8">Select a live match to view its innings timeline.</p>
+            </div>
+        </div>
+
+        <!-- ==================== VIEW 4: STATS & MATCH INFO ==================== -->
+        <div id="view-stats" class="tab-view hidden space-y-6">
+            <div class="bg-petrol-800/80 border border-white/10 rounded-2xl p-6 glass-panel" id="dynamic-stats-container">
+                <p class="text-gray-400 text-sm text-center py-8">Select a live match to view match information.</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-petrol-900 border-t border-white/10 py-6 mt-12 text-xs text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-2">
+                <span class="font-extrabold text-white italic tracking-wider">boundary<span class="text-mint-400">.</span></span>
+                <span>— Powered by Boundary Realtime</span>
+            </div>
+            <div>
+                <span>© 2026 CrickPulse Analytics Ltd.</span>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
