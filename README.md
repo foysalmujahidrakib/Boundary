@@ -1,8 +1,5 @@
 
-# Boundary — Stage 7: Scorecards & Player Statistics
-
-Stage 7 builds report pages on top of the Stage 6 `matchScores/{matchId}` innings and delivery data.
-
+# Boundary — 
 ## Included
 - `scorecard.html` and `js/scorecard.js`.
 - Scorecard link beside every match in Match Centre.
@@ -36,11 +33,7 @@ Stage 7 builds report pages on top of the Stage 6 `matchScores/{matchId}` inning
 - For accurate official partnerships and dismissal details, Stage 8 / a later scoring-engine hardening pass should capture dismissed batter, dismissal type, fielder, completed runs, striker/non-striker end changes, and bowler wicket credit per delivery.
 
 
-## Stage 8 — Testing, security and deployment readiness
 
-Stage 8 preserves the complete Stage 7 website and adds `TESTING.md` and `.gitignore`. The testing guide covers authentication, club permissions, tournaments, matches, scoring, scorecards and Firebase Hosting deployment.
-
-This package does not deploy your Firebase project or certify its security. Complete the production engineering checklist in `TESTING.md` before accepting real public tournament data.
 
 Run locally:
 ```bash
