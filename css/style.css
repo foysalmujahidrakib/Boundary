@@ -195,6 +195,13 @@ textarea {
     color: #ffffff;
     margin: 19px 0 14px
 }
+.eyebrow3 h2 {
+    display: block;
+    font: 800 clamp(44px, 5.5vw, 67px)/1.08 Manrope, sans-serif;
+    letter-spacing: -3px;
+    color: #ffffff;
+    margin: 19px 0 14px;
+}
 .hero h1,
 .dash-heading h1 {
     font: 800 clamp(44px, 5.5vw, 67px)/1.08 Manrope, sans-serif;
@@ -1126,7 +1133,7 @@ footer {
 }
 
 .club-item-link:hover {
-    background: #f5f8f9
+    background: #010e13
 }
 
 .club-page-heading {
@@ -1170,7 +1177,7 @@ footer {
     align-items: center;
     gap: 11px;
     padding: 12px 3px;
-    border-bottom: 1px solid #edf0f1;
+    border-bottom: 1px solid #020a0d;
     min-width: 0
 }
 
@@ -1227,8 +1234,8 @@ footer {
     display: grid;
     place-items: center;
     border-radius: 7px;
-    background: #edf2f4;
-    color: var(--blue-dark);
+    background: #22c55e;
+   
     font: 800 12px Manrope;
     flex-shrink: 0
 }
@@ -1246,18 +1253,18 @@ footer {
 .management-form .field textarea,
 .management-form .field select {
     width: 100%;
-    border: 1px solid #dce4e8;
+    border: 1px solid #020e14;
     border-radius: 5px;
     padding: 11px;
     color: var(--ink);
     font-size: 11px;
-    background: #fff
+    background: #060716
 }
 
 .management-form .field label {
     font-size: 10px;
     font-weight: 700;
-    color: #52636c
+    color: #22c55e
 }
 
 .form-two {
