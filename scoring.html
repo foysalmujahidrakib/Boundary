@@ -41,33 +41,12 @@
             padding: 0 18px 30px
         }
 
-        .score-hero {
-            background: var(--olive);
-            color: #04131e;
-            border-radius: 22px;
-            padding: 24px 28px;
-            margin-bottom: 14px
-        }
-
         .score-line {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 16px;
             flex-wrap: wrap
-        }
-
-        .score-hero h1 {
-            font: 800 28px Manrope;
-            margin: 4px 0
-        }
-
-        .score-meta {
-            color: #094634
-        }
-
-        .score-total {
-            font: 800 42px Manrope
         }
 
         .score-grid {
@@ -146,14 +125,6 @@
             font-size: 25px
         }
 
-        .score-selects {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin: 12px 0
-        }
-
-        .score-selects label,
         .start-grid label {
             display: block;
             font-size: 12px;
@@ -162,7 +133,6 @@
             margin-bottom: 6px
         }
 
-        .score-selects select,
         .start-grid select,
         .start-grid input,
         .modal-field input,
@@ -446,18 +416,11 @@
                 grid-template-columns: 1fr
             }
 
-            .score-total {
-                font-size: 34px
-            }
         }
 
         @media(max-width:520px) {
             .score-wrap {
                 padding: 0 10px
-            }
-
-            .score-hero {
-                padding: 18px
             }
 
             .score-summary {
@@ -510,9 +473,6 @@
                 font-size: 9px
             }
 
-            .score-selects {
-                grid-template-columns: 1fr
-            }
         }
     </style>
 </head>
@@ -528,19 +488,6 @@
     </header>
     <main class="score-wrap">
         <div id="pageNotice" class="notice hidden" role="status"></div>
-        <section class="score-hero">
-            <div class="score-line">
-                <div>
-                    <div class="eyebrow">● LIVE MATCH CENTRE</div>
-                    <h1 id="matchTitle">Loading match…</h1>
-                    <div class="score-meta" id="matchMeta">Loading fixture details</div>
-                </div>
-                <div style="text-align:right">
-                    <div class="score-total" id="heroScore">0/0</div>
-                    <div class="score-meta" id="oversText">0.0</div>
-                </div>
-            </div>
-        </section>
         <div class="score-grid">
             <section>
                 <div class="score-card" id="setupCard">
@@ -596,12 +543,6 @@
                     <div style="margin-top:16px">
                         <div class="muted" style="margin-bottom:7px">RECENT DELIVERIES</div>
                         <div id="ballLog" class="ball-log"><span class="muted">No deliveries yet.</span></div>
-                    </div>
-                    <div class="score-selects">
-                        <div><label for="strikerSelect">Striker</label><select id="strikerSelect"></select></div>
-                        <div><label for="nonStrikerSelect">Non-striker</label><select id="nonStrikerSelect"></select>
-                        </div>
-                        <div><label for="bowlerSelect">Bowler</label><select id="bowlerSelect"></select></div>
                     </div>
                     <div class="muted" style="margin:12px 0">TAP A RUN VALUE TO RECORD A DELIVERY</div>
                     <div class="score-controls">

@@ -201,8 +201,6 @@ function render() {
   if (!score || activeIndex < 0) {
     $("setupCard").classList.remove("hidden");
     $("liveCard").classList.add("hidden");
-    $("heroScore").textContent = "0/0";
-    $("oversText").textContent = "0.0 overs";
     $("inningsSummary").textContent = "No innings recorded.";
     return;
   }
@@ -210,8 +208,6 @@ function render() {
   const inn = current();
   $("setupCard").classList.add("hidden");
   $("liveCard").classList.remove("hidden");
-  $("heroScore").textContent = `${inn.total}/${inn.wickets}`;
-  $("oversText").textContent = `${ballsToOvers(inn.legalBalls)} overs`;
   $("inningsHeading").textContent = `${ordinal(inn.number)} innings`;
   $("inningsTeams").textContent = `${teamName(inn.battingTeamId)} batting · ${teamName(inn.bowlingTeamId)} bowling`;
   $("inningsStatus").textContent = inn.completed ? "INNINGS COMPLETED" : "● LIVE";
@@ -224,15 +220,6 @@ function render() {
   $("runRate").textContent = `RR ${(oversDecimal ? inn.total / oversDecimal : 0).toFixed(2)}`;
 
   const dismissed = new Set(inn.dismissedBatterIds || []);
-  const batting = players.filter(p => p.teamId === inn.battingTeamId && !dismissed.has(p.id));
-  const bowling = players.filter(p => p.teamId === inn.bowlingTeamId);
-  populate("strikerSelect", batting, inn.strikerId);
-  populate("nonStrikerSelect", batting, inn.nonStrikerId);
-  populate("bowlerSelect", bowling, inn.bowlerId);
-
-  $("strikerSelect").disabled = $("nonStrikerSelect").disabled =
-    $("bowlerSelect").disabled = inn.completed || !canScore();
-
   const controlsDisabled = inn.completed || !canScore() || scoringBusy;
   document.querySelectorAll("[data-run],#wicketBtn,#wideBtn,#noBallBtn,#byeBtn,#legByeBtn,#penaltyBtn")
     .forEach(b => b.disabled = controlsDisabled);
@@ -391,9 +378,9 @@ function chooseNextBowler(inn) {
 async function saveDelivery(kind, requestedRuns = 0, wicket = false, options = {}) {
   const inn = current();
   if (!inn || inn.completed || !canScore() || scoringBusy) return;
-  const striker = $("strikerSelect").value;
-  const nonStriker = $("nonStrikerSelect").value;
-  const bowler = $("bowlerSelect").value;
+  const striker = inn.strikerId;
+  const nonStriker = inn.nonStrikerId;
+  const bowler = inn.bowlerId;
   if (!striker || !nonStriker || !bowler || striker === nonStriker) {
     $("scoreMessage").textContent = "Select two different batters and a bowler.";
     return;
@@ -861,99 +848,6 @@ $("bowlingTeam").addEventListener(
 
 
 // ========================================
-// BATTER AND BOWLER SELECTION
-// ========================================
-
-[
-  "strikerSelect",
-  "nonStrikerSelect",
-  "bowlerSelect"
-].forEach((id) => {
-
-  $(id).addEventListener("change", async () => {
-    const inn = current();
-
-    if (!inn || !canScore() || scoringBusy) return;
-
-    const selectedId = $(id).value;
-
-    const field =
-      id === "strikerSelect"
-        ? "strikerId"
-        : id === "nonStrikerSelect"
-          ? "nonStrikerId"
-          : "bowlerId";
-
-    // FIXED BOWLER DROPDOWN VALIDATION
-
-    if (field === "bowlerId") {
-      const limit = maxOversPerBowler();
-
-      if (bowlerOvers(inn, selectedId) >= limit) {
-        alert(
-          `${playerName(selectedId)} has reached the ${limit}-over limit.`
-        );
-
-        render();
-        return;
-      }
-
-      const atOverStart =
-        inn.legalBalls > 0 &&
-        inn.legalBalls % 6 === 0;
-
-      const previousBowlerId =
-        previousOverBowlerId(inn);
-
-      // Compare against the actual previous over bowler.
-
-      if (
-        atOverStart &&
-        selectedId === previousBowlerId
-      ) {
-        alert(
-          "The same bowler cannot bowl consecutive overs."
-        );
-
-        render();
-        return;
-      }
-    }
-
-    try {
-      await runTransaction(db, async (tx) => {
-        const snap = await tx.get(scoreRef());
-
-        if (!snap.exists()) {
-          throw new Error("Score record missing.");
-        }
-
-        const innings = snap.data().innings;
-
-        innings[activeIndex] = {
-          ...innings[activeIndex],
-          [field]: selectedId
-        };
-
-        tx.update(scoreRef(), {
-          innings,
-          updatedAt: serverTimestamp()
-        });
-      });
-
-      await loadScore();
-
-    } catch (e) {
-      console.error(e);
-
-      alert("Could not update the selected player.");
-    }
-  });
-
-});
-
-
-// ========================================
 // SCORING BUTTONS AND MODALS
 // ========================================
 document.querySelectorAll("[data-run]").forEach(button => {
@@ -1259,15 +1153,6 @@ if (!isConfigured || !auth || !db) {
 
         return;
       }
-
-      // MATCH INFORMATION
-
-      $("matchTitle").textContent =
-        match.title ||
-        `${teamName(match.teamAId)} vs ${teamName(match.teamBId)}`;
-
-      $("matchMeta").textContent =
-        `${match.matchDate || ""} · ${match.startTime || ""} · ${match.venue || ""} · ${match.format || ""}`;
 
       // TEAM DROPDOWNS
 
