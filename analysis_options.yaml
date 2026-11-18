@@ -1,0 +1,16 @@
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  language:
+    strict-casts: false
+  errors:
+    # Firestore documents are untyped maps; the data layer deals with that.
+    avoid_dynamic_calls: ignore
+
+linter:
+  rules:
+    prefer_single_quotes: true
+    prefer_final_locals: true
+    always_declare_return_types: true
+    unawaited_futures: true
+    avoid_print: true
