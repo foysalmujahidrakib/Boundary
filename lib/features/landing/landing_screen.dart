@@ -36,6 +36,7 @@ class _LandingScreenState extends State<LandingScreen> {
   void _openLive() => Navigator.of(context).pushNamed(AppRoutes.liveMatches);
   void _openTournaments() =>
       Navigator.of(context).pushNamed(AppRoutes.tournament);
+  void _openAllMatches() => Navigator.of(context).pushNamed(AppRoutes.allMatches);
 
   void _primaryAction(User? user, {bool register = true}) {
     if (user != null) {
@@ -123,7 +124,7 @@ class _LandingScreenState extends State<LandingScreen> {
                       onPrimary: () => _primaryAction(user),
                       onExplore: () => _scrollTo(_featuresKey),
                     ),
-                    const SizedBox(height: 36),
+                    const SizedBox(height: 50),
                     _SectionIntro(
                       eyebrow: 'Follow the action',
                       title: 'Live match.',
@@ -134,8 +135,19 @@ class _LandingScreenState extends State<LandingScreen> {
                         child: const Text('Open Live Match Centre →'),
                       ),
                     ),
-                    const SizedBox(height: 36),
-                    const SizedBox(height: 36),
+                      const SizedBox(height: 36),
+                    _SectionIntro(
+                      eyebrow: 'Follow the action',
+                      title: 'All Matches.',
+                      body:
+                          'See every completed match in one All Matches centre.',
+                      action: FilledButton(
+                        onPressed: _openAllMatches,
+                        child: const Text('Open All Matches →'),
+                      ),
+                    ),
+
+                    const SizedBox(height: 50),
                     _SectionIntro(
                       // remove `const` since onPressed is not const
                       eyebrow: 'Competition centre',
@@ -584,7 +596,7 @@ class _Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const BrandLogo(size: 50),
+        const BrandLogo(size: 35),
         const SizedBox(height: 14),
         Text(
           '© Boundary · Developed by Foysal Mujahid Rakib',

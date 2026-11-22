@@ -32,6 +32,7 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
   late final _season = TextEditingController(
     text: widget.initial?.season ?? '',
   );
+ 
   late final _venue = TextEditingController(text: widget.initial?.venue ?? '');
 
   late String _format = _orDefault(widget.initial?.format, 'T20');
@@ -52,6 +53,8 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
     _name.dispose();
     _season.dispose();
     _venue.dispose();
+    
+
     super.dispose();
   }
 
@@ -83,6 +86,7 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
         clubId: widget.clubId,
         name: _name.text.trim(),
         season: _season.text.trim(),
+        //tournamentStyle: _tournamentStyle.text.trim(),
         format: _format,
         startDate: _start,
         endDate: _end,
@@ -129,6 +133,7 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
               options: TournamentFormat.options,
               onChanged: (v) => setState(() => _format = v ?? _format),
             ),
+           
             const FieldGap(),
             Row(
               children: [

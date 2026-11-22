@@ -13,6 +13,9 @@ abstract final class AppRoutes {
   static const liveMatches = '/live';
   static const publicScorecard = '/public-scorecard';
   static const tournament = '/tournament';
+  static const tournamentMatches = '/tournament-matches';
+  //static const tournament = '/tournament';
+  static const allMatches = '/all-matches';
 
 }
 
@@ -33,4 +36,13 @@ class MatchArgs {
 class PublicMatchArgs {
   const PublicMatchArgs(this.matchId);
   final String matchId;
+}
+/// Arguments for the public list of one tournament's matches.
+class TournamentMatchesArgs {
+  const TournamentMatchesArgs({
+    required this.tournamentId,
+    required this.tournamentName,
+  });
+  final String tournamentId;
+  final String tournamentName;
 }

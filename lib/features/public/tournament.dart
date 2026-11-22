@@ -6,12 +6,11 @@ import '../../core/ui.dart';
 import '../../domain/models/public_models.dart';
 import '../../shared/widgets/app_card.dart';
 import '../../shared/widgets/feedback.dart';
-
 import '../../shared/widgets/responsive.dart';
 import '../../shared/widgets/standings_table.dart';
 
-/// Public page listing every **ongoing** tournament with its live matches,
-/// recent results and points table. No sign-in required.
+/// Public page listing every **ongoing** tournament with its points table
+/// and a "See Matches" button. No sign-in required.
 class TournamentScreen extends StatelessWidget {
   const TournamentScreen({super.key});
 
@@ -19,9 +18,7 @@ class TournamentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final repo = AppScope.of(context).public;
     return Scaffold(
-    appBar: AppBar(
-        title: const Text('Ongoing tournaments')
-        ),
+      appBar: AppBar(title: const Text('Ongoing Tournaments')),
       body: SafeArea(
         child: StreamBuilder<List<PublicTournament>>(
           stream: repo.watchOngoingTournaments(),
@@ -45,36 +42,30 @@ class TournamentScreen extends StatelessWidget {
             final sorted = [...tournaments]
               ..sort((a, b) => b.startDate.compareTo(a.startDate));
 
-            // Matches are loaded once and shared by every tournament card.
+            // Completed matches are loaded once and shared by every card
+            // (they are only needed for the standings tables).
             return StreamBuilder<List<PublicMatchScore>>(
               stream: repo.watchCompletedMatches(),
               builder: (context, completedSnap) {
-                return StreamBuilder<List<PublicMatchScore>>(
-                  stream: repo.watchLiveMatches(),
-                  builder: (context, liveSnap) {
-                    final completed = completedSnap.data;
-                    final live = liveSnap.data ?? const <PublicMatchScore>[];
-                    return ListView(
-                      padding: EdgeInsets.zero,
-                      children: [
-                        ContentWidth(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              for (final t in sorted) ...[
-                                _TournamentCard(
-                                  tournament: t,
-                                  completed: completed,
-                                  live: live,
-                                ),
-                                const SizedBox(height: 16),
-                              ],
-                            ],
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+                final completed = completedSnap.data;
+                return ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    ContentWidth(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          for (final t in sorted) ...[
+                            _TournamentCard(
+                              tournament: t,
+                              completed: completed,
+                            ),
+                            const SizedBox(height: 16),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ],
                 );
               },
             );
@@ -89,17 +80,12 @@ class TournamentScreen extends StatelessWidget {
 }
 
 class _TournamentCard extends StatelessWidget {
-  const _TournamentCard({
-    required this.tournament,
-    required this.completed,
-    required this.live,
-  });
+  const _TournamentCard({required this.tournament, required this.completed});
 
   final PublicTournament tournament;
 
   /// `null` while the results are still loading.
   final List<PublicMatchScore>? completed;
-  final List<PublicMatchScore> live;
 
   @override
   Widget build(BuildContext context) {
@@ -110,13 +96,6 @@ class _TournamentCard extends StatelessWidget {
       [t.startDate, t.endDate].where((d) => d.isNotEmpty).join(' → '),
       t.venue,
     ].where((s) => s.isNotEmpty).join(' · ');
-
-    final liveHere = live.where((m) => m.tournamentId == t.id).toList();
-    final results =
-        (completed ?? const <PublicMatchScore>[])
-            .where((m) => m.tournamentId == t.id)
-            .toList()
-          ..sort((a, b) => b.matchDate.compareTo(a.matchDate));
 
     return AppCard(
       padding: const EdgeInsets.all(18),
@@ -137,12 +116,6 @@ class _TournamentCard extends StatelessWidget {
           ],
           const SizedBox(height: 4),
           Text('${t.teamIds.length} teams', style: AppText.muted(size: 12)),
-          if (liveHere.isNotEmpty) ...[
-            const SizedBox(height: 18),
-            const Eyebrow('Live now'),
-            const SizedBox(height: 8),
-            for (final m in liveHere) _MatchTile(match: m, live: true),
-          ],
           const SizedBox(height: 18),
           const Eyebrow('Standings'),
           const SizedBox(height: 8),
@@ -150,73 +123,21 @@ class _TournamentCard extends StatelessWidget {
             const LoadingBlock()
           else
             StandingsTable(tournament: t, matches: completed!),
-          if (results.isNotEmpty) ...[
-            const SizedBox(height: 18),
-            const Eyebrow('Recent results'),
-            const SizedBox(height: 8),
-            for (final m in results.take(5)) _MatchTile(match: m),
-          ],
+          const SizedBox(height: 14),
+          OutlinedButton.icon(
+            icon: const Icon(Icons.sports_cricket, size: 18),
+            label: const Text('See Matches'),
+            onPressed: () => Navigator.of(context).pushNamed(
+              AppRoutes.tournamentMatches,
+              arguments: TournamentMatchesArgs(
+                tournamentId: t.id,
+                tournamentName: t.name,
+              ),
+            ),
+          ),
         ],
       ),
     );
-  }
-}
-
-/// A tappable match row that opens the public scorecard.
-class _MatchTile extends StatelessWidget {
-  const _MatchTile({required this.match, this.live = false});
-
-  final PublicMatchScore match;
-  final bool live;
-
-  @override
-  Widget build(BuildContext context) {
-    final subtitle = live ? _liveScore(match) : match.result;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: AppCard(
-        color: AppColors.canvas,
-        radius: 10,
-        padding: const EdgeInsets.all(12),
-                onTap: () => Navigator.of(context).pushNamed(
-          AppRoutes.publicScorecard,
-          arguments: PublicMatchArgs(match.matchId),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(match.displayTitle, style: AppText.heading(size: 14)),
-                  if (subtitle.isNotEmpty) ...[
-                    const SizedBox(height: 2),
-                    Text(
-                      subtitle,
-                      style: AppText.body(
-                        size: 12,
-                        color: live ? AppColors.mint : AppColors.muted,
-                      ),
-                    ),
-                  ],
-                  if (match.matchDate.isNotEmpty)
-                    Text(match.matchDate, style: AppText.muted(size: 11)),
-                ],
-              ),
-            ),
-            const Icon(Icons.chevron_right, color: AppColors.muted),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// `Dhaka FC 104/6 (14.2 ov)` for the innings in progress.
-  static String _liveScore(PublicMatchScore m) {
-    if (m.innings.isEmpty) return 'Starting soon';
-    final inn = m.innings.last;
-    return '${m.teamName(inn.battingTeamId)} '
-        '${inn.total}/${inn.wickets} (${inn.oversLabel} ov)';
   }
 }
 

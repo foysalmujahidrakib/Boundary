@@ -200,7 +200,7 @@ const _prompts = <String, _ExtraPrompt>{
     'No ball',
     'Runs scored off the bat (the no-ball adds 1 more).',
     0,
-    0,
+    1,
   ),
   DeliveryKind.bye: _ExtraPrompt('Byes', 'Byes run.', 1, 1),
   DeliveryKind.legBye: _ExtraPrompt('Leg byes', 'Leg byes run.', 1, 1),

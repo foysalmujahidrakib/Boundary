@@ -12,6 +12,9 @@ import 'features/scorecard/scorecard_screen.dart';
 import 'features/scoring/scoring_screen.dart';
 import 'features/tournaments/tournaments_screen.dart';
 import 'features/public/tournament.dart';
+import 'features/public/tournament_matches_screen.dart';
+import 'features/public/all_matches_screen.dart';
+import 'features/public/tournament.dart';
 
 /// Root widget: theme, service scope and route table.
 class BoundaryApp extends StatelessWidget {
@@ -32,9 +35,8 @@ class BoundaryApp extends StatelessWidget {
         initialRoute: AppRoutes.landing,
         // Applies system-inset protection to the Navigator, including every
         // route, dialog, and bottom sheet presented by the main application.
-        builder: (context, child) => SafeArea(
-          child: child ?? const SizedBox.shrink(),
-        ),
+        builder: (context, child) =>
+            SafeArea(child: child ?? const SizedBox.shrink()),
         onGenerateRoute: _onGenerateRoute,
       ),
     );
@@ -63,6 +65,14 @@ class BoundaryApp extends StatelessWidget {
           if (args is MatchArgs) return ScoringScreen(args: args);
         case AppRoutes.scorecard:
           if (args is MatchArgs) return ScorecardScreen(args: args);
+        case AppRoutes.tournamentMatches:
+          if (args is TournamentMatchesArgs) {
+            return TournamentMatchesScreen(args: args);
+          }
+        case AppRoutes.tournament:
+          return const TournamentScreen();
+        case AppRoutes.allMatches:
+          return const AllMatchesScreen();
         case AppRoutes.publicScorecard:
           if (args is PublicMatchArgs) return PublicScorecardScreen(args: args);
       }
