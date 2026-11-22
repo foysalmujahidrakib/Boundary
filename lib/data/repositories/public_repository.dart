@@ -53,6 +53,15 @@ class PublicRepository {
             .toList(),
       );
 
+      /// Tournaments currently in progress (`status == ongoing`).
+  Stream<List<PublicTournament>> watchOngoingTournaments() => _db
+      .collection(Collections.publicTournaments)
+      .where('status', isEqualTo: TournamentStatus.ongoing)
+      .snapshots()
+      .map((snap) => snap.docs
+          .map((d) => PublicTournament.fromMap(d.id, d.decodedData))
+          .toList());
+
   /// One published match (`null` while nothing has been published).
   Stream<PublicMatchScore?> watchMatch(String matchId) => _db
       .collection(Collections.publicMatchScores)
@@ -63,3 +72,4 @@ class PublicRepository {
         return data == null ? null : PublicMatchScore.fromMap(doc.id, data);
       });
 }
+  

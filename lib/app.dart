@@ -11,6 +11,7 @@ import 'features/public/live_matches_screen.dart';
 import 'features/scorecard/scorecard_screen.dart';
 import 'features/scoring/scoring_screen.dart';
 import 'features/tournaments/tournaments_screen.dart';
+import 'features/public/tournament.dart';
 
 /// Root widget: theme, service scope and route table.
 class BoundaryApp extends StatelessWidget {
@@ -50,6 +51,8 @@ class BoundaryApp extends StatelessWidget {
           return const DashboardScreen();
         case AppRoutes.liveMatches:
           return const LiveMatchesScreen();
+        case AppRoutes.tournament:
+          return const TournamentScreen();
         case AppRoutes.club:
           if (args is ClubArgs) return ClubScreen(args: args);
         case AppRoutes.matches:
@@ -109,3 +112,7 @@ class _NotFoundScreen extends StatelessWidget {
     );
   }
 }
+// a) with the other imports:
+
+
+// b) in screenForPath, next to LiveLocation():

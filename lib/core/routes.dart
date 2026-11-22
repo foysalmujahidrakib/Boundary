@@ -12,6 +12,8 @@ abstract final class AppRoutes {
   static const scorecard = '/scorecard';
   static const liveMatches = '/live';
   static const publicScorecard = '/public-scorecard';
+  static const tournament = '/tournament';
+
 }
 
 /// Arguments for routes that work inside one club.

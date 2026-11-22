@@ -9,7 +9,6 @@ import '../../shared/widgets/app_card.dart';
 import '../../shared/widgets/brand_logo.dart';
 import '../../shared/widgets/responsive.dart';
 import '../auth/auth_sheet.dart';
-import 'public_standings_section.dart';
 
 /// The public homepage (`index.html`): hero, live matches, public
 /// tournament standings, features and sign-up.
@@ -35,6 +34,8 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   void _openLive() => Navigator.of(context).pushNamed(AppRoutes.liveMatches);
+  void _openTournaments() =>
+      Navigator.of(context).pushNamed(AppRoutes.tournament);
 
   void _primaryAction(User? user, {bool register = true}) {
     if (user != null) {
@@ -134,14 +135,29 @@ class _LandingScreenState extends State<LandingScreen> {
                       ),
                     ),
                     const SizedBox(height: 36),
-                    const _SectionIntro(
+                    const SizedBox(height: 36),
+                    _SectionIntro(
+                      // remove `const` since onPressed is not const
                       eyebrow: 'Competition centre',
                       title: 'Tournament standings.',
                       body:
                           'Every tournament on Boundary is public. Pick one to see its teams, points and net run rate.',
+                      action: OutlinedButton(
+                        onPressed: _openTournaments,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              AppColors.mint, // Button background color  
+                        ),
+                        child: 
+                        const Text('View Ongoing Tournaments →',
+                        style:TextStyle(
+                          color: Colors.black, // Button text color
+                        ),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    const PublicStandingsSection(),
+                    //const PublicStandingsSection(),
                     const SizedBox(height: 40),
                     const _AudienceStrip(),
                     const SizedBox(height: 40),
@@ -568,8 +584,8 @@ class _Footer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const BrandLogo(size: 17),
-        const SizedBox(height: 8),
+        const BrandLogo(size: 50),
+        const SizedBox(height: 14),
         Text(
           '© Boundary · Developed by Foysal Mujahid Rakib',
           textAlign: TextAlign.center,

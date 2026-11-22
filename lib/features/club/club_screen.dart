@@ -260,8 +260,16 @@ class _ClubHeading extends StatelessWidget {
               ),
             ),
             OutlinedButton.icon(
-              icon: const Icon(Icons.sports_cricket, size: 18),
-              label: const Text('Matches'),
+              style: OutlinedButton.styleFrom(
+                backgroundColor: AppColors.mint, // Button background color
+              ),
+              icon: const Icon(Icons.sports_cricket, color:Colors.black, size: 18),
+              label: 
+              const Text('Matches',
+              style: TextStyle(
+                color: Colors.black, // Button text color
+              ),
+              ),
               onPressed: () => Navigator.of(context).pushNamed(
                 AppRoutes.matches,
                 arguments: ClubArgs(controller.clubId),
