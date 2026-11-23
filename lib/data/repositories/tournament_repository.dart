@@ -102,6 +102,7 @@ class TournamentRepository {
         endDate: t.endDate,
         venue: t.venue,
         status: t.status,
+        logoUrl: t.logoUrl,
         teamIds: t.teamIds,
         teamNames: {
           for (final teamId in t.teamIds)

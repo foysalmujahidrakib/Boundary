@@ -105,6 +105,19 @@ class _TournamentCard extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (t.logoUrl.isNotEmpty) ...[
+  ClipRRect(
+    borderRadius: BorderRadius.circular(10),
+    child: Image.network(
+      t.logoUrl,
+      width: 44,
+      height: 44,
+      fit: BoxFit.cover,
+      errorBuilder: (_, _, _) => const SizedBox.shrink(),
+    ),
+  ),
+  const SizedBox(width: 12),
+],
               Expanded(child: Text(t.name, style: AppText.heading(size: 22))),
               const SizedBox(width: 8),
               const _OngoingBadge(),

@@ -17,6 +17,8 @@ dependencies:
   firebase_core: ^4.0.0
   firebase_auth: ^6.0.0
   cloud_firestore: ^6.0.0
+  firebase_storage: ^13.0.0
+  image_picker: ^1.1.2
 
   # DM Sans / Manrope / Anton, the fonts used by the web CSS.
   google_fonts: ^8.0.0

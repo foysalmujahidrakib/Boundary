@@ -14,6 +14,7 @@ class PublicTournament {
     this.endDate = '',
     this.venue = '',
     this.status = 'planned',
+    this.logoUrl = '',
     this.teamIds = const [],
     this.teamNames = const {},
   });
@@ -29,6 +30,7 @@ class PublicTournament {
         endDate: data.str('endDate'),
         venue: data.str('venue'),
         status: data.str('status', 'planned'),
+        logoUrl: data.str('logoUrl'),
         teamIds: data.stringList('teamIds'),
         teamNames: {
           for (final e in data.nested('teamNames').entries)
@@ -45,6 +47,7 @@ class PublicTournament {
   final String endDate;
   final String venue;
   final String status;
+  final String logoUrl;
   final List<String> teamIds;
   final Map<String, String> teamNames;
 
@@ -60,6 +63,7 @@ class PublicTournament {
     'endDate': endDate,
     'venue': venue,
     'status': status,
+    'logoUrl': logoUrl,
     'teamIds': teamIds,
     'teamNames': teamNames,
   };
@@ -74,7 +78,8 @@ class PublicTournament {
         !same(startDate, other.startDate) ||
         !same(endDate, other.endDate) ||
         !same(venue, other.venue) ||
-        !same(status, other.status)) {
+        !same(status, other.status) ||
+        !same(logoUrl, other.logoUrl)) {
       return true;
     }
     if (teamIds.length != other.teamIds.length) return true;

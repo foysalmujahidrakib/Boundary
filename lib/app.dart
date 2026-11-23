@@ -14,7 +14,6 @@ import 'features/tournaments/tournaments_screen.dart';
 import 'features/public/tournament.dart';
 import 'features/public/tournament_matches_screen.dart';
 import 'features/public/all_matches_screen.dart';
-import 'features/public/tournament.dart';
 
 /// Root widget: theme, service scope and route table.
 class BoundaryApp extends StatelessWidget {
@@ -69,8 +68,6 @@ class BoundaryApp extends StatelessWidget {
           if (args is TournamentMatchesArgs) {
             return TournamentMatchesScreen(args: args);
           }
-        case AppRoutes.tournament:
-          return const TournamentScreen();
         case AppRoutes.allMatches:
           return const AllMatchesScreen();
         case AppRoutes.publicScorecard:

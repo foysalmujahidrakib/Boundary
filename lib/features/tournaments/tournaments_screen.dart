@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
 import '../../app_services.dart';
 import '../../core/routes.dart';
 import '../../core/theme/app_colors.dart';
@@ -17,6 +16,7 @@ import 'tournament_form_sheet.dart';
 
 /// A club's tournaments (`tournaments.html`). Every save is mirrored to the
 /// public standings summary.
+
 class TournamentsScreen extends StatelessWidget {
   const TournamentsScreen({super.key, required this.args});
 
@@ -237,12 +237,31 @@ class _TournamentTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(child: Text(t.name, style: AppText.heading(size: 17))),
-              StatusChip(t.status),
-            ],
+         Row(
+  crossAxisAlignment: CrossAxisAlignment.center,
+  children: [
+    if (t.logoUrl.isNotEmpty) ...[
+      ClipRRect(
+        borderRadius: BorderRadius.circular(10),
+        child: Image.network(
+          t.logoUrl,
+          width: 40,
+          height: 40,
+          fit: BoxFit.cover,
+          errorBuilder: (_, _, _) => Container(
+            width: 40,
+            height: 40,
+            color: AppColors.fill,
+            child: const Icon(Icons.emoji_events_outlined, size: 20),
           ),
+        ),
+      ),
+      const SizedBox(width: 12),
+    ],
+    Expanded(child: Text(t.name, style: AppText.heading(size: 17))),
+    StatusChip(t.status),
+  ],
+),
           if (meta.isNotEmpty) ...[
             const SizedBox(height: 4),
             Text(meta, style: AppText.muted(size: 12)),

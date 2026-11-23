@@ -121,7 +121,7 @@ service cloud.firestore {
         && request.resource.data.status in ['planned', 'ongoing', 'completed', 'cancelled']
         && request.resource.data.keys().hasOnly([
           'clubId', 'name', 'season', 'format', 'startDate', 'endDate',
-          'venue', 'status', 'teamIds', 'teamNames', 'updatedAt'
+          'venue', 'status', 'logoUrl', 'teamIds', 'teamNames', 'updatedAt'
         ]);
       allow update: if signedIn()
         && isClubAdmin(resource.data.clubId)
@@ -132,7 +132,7 @@ service cloud.firestore {
         && request.resource.data.status in ['planned', 'ongoing', 'completed', 'cancelled']
         && request.resource.data.keys().hasOnly([
           'clubId', 'name', 'season', 'format', 'startDate', 'endDate',
-          'venue', 'status', 'teamIds', 'teamNames', 'updatedAt'
+          'venue', 'status', 'logoUrl', 'teamIds', 'teamNames', 'updatedAt'
         ]);
       allow delete: if signedIn() && isClubAdmin(resource.data.clubId);
     }
