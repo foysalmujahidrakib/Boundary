@@ -13,6 +13,7 @@ import '../../shared/widgets/feedback.dart';
 import '../../shared/widgets/match_header.dart';
 import '../../shared/widgets/scorecard_widgets.dart';
 import '../scorecard/scorecard_screen.dart' show PublicScorecardView;
+import '../../shared/widgets/live_viewer_count.dart';
 
 /// Live Match Centre (`Livematches.html`): every match being played right
 /// now, with live score, scorecard, over-by-over timeline and match info.
@@ -97,31 +98,35 @@ class LiveMatchCentre extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Column(
-        children: [
-          const TabBar(
-            isScrollable: true,
-            tabAlignment: TabAlignment.start,
-            tabs: [
-              Tab(text: 'Live'),
-              Tab(text: 'Scorecard'),
-              Tab(text: 'Overs'),
-              Tab(text: 'Info'),
-            ],
-          ),
-          Expanded(
-            child: TabBarView(
-              children: [
-                _tab(_LiveTab(match: match)),
-                _tab(PublicScorecardView(match: match)),
-                _tab(_OversTab(match: match)),
-                _tab(_InfoTab(match: match)),
+    return ViewerPresence(
+      key: ValueKey(match.matchId),
+      matchId: match.matchId,
+      child: DefaultTabController(
+        length: 4,
+        child: Column(
+          children: [
+            const TabBar(
+              isScrollable: true,
+              tabAlignment: TabAlignment.start,
+              tabs: [
+                Tab(text: 'Live'),
+                Tab(text: 'Scorecard'),
+                Tab(text: 'Overs'),
+                Tab(text: 'Info'),
               ],
             ),
-          ),
-        ],
+            Expanded(
+              child: TabBarView(
+                children: [
+                  _tab(_LiveTab(match: match)),
+                  _tab(PublicScorecardView(match: match)),
+                  _tab(_OversTab(match: match)),
+                  _tab(_InfoTab(match: match)),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -149,6 +154,7 @@ class _LiveTab extends StatelessWidget {
             live: true,
             title: match.displayTitle,
             meta: match.meta,
+            badgeTrailing: LiveViewerCount(matchId: match.matchId),
           ),
           const SizedBox(height: 16),
           const EmptyState('The innings has not started yet.'),
@@ -179,6 +185,7 @@ class _LiveTab extends StatelessWidget {
           title: match.displayTitle,
           meta: match.meta,
           result: match.result,
+          badgeTrailing: LiveViewerCount(matchId: match.matchId),
         ),
         const SizedBox(height: 16),
         AppCard(

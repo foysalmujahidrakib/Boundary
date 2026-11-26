@@ -12,7 +12,6 @@ class Tournament {
     this.endDate = '',
     this.venue = '',
     this.status = 'planned',
-    this.logoUrl = '',
     this.teamIds = const [],
   });
 
@@ -27,7 +26,6 @@ class Tournament {
         endDate: data.str('endDate'),
         venue: data.str('venue'),
         status: data.str('status', 'planned'),
-        logoUrl: data.str('logoUrl'),
         teamIds: data.stringList('teamIds'),
       );
 
@@ -42,7 +40,6 @@ class Tournament {
   final String endDate;
   final String venue;
   final String status;
-  final String logoUrl;
   final List<String> teamIds;
 
   Map<String, dynamic> toMap() => {
@@ -54,7 +51,6 @@ class Tournament {
     'endDate': endDate,
     'venue': venue,
     'status': status,
-    'logoUrl': logoUrl,
     'teamIds': teamIds,
   };
 }

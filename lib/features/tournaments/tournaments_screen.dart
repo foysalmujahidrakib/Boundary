@@ -237,31 +237,13 @@ class _TournamentTile extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-         Row(
-  crossAxisAlignment: CrossAxisAlignment.center,
-  children: [
-    if (t.logoUrl.isNotEmpty) ...[
-      ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: Image.network(
-          t.logoUrl,
-          width: 40,
-          height: 40,
-          fit: BoxFit.cover,
-          errorBuilder: (_, _, _) => Container(
-            width: 40,
-            height: 40,
-            color: AppColors.fill,
-            child: const Icon(Icons.emoji_events_outlined, size: 20),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(child: Text(t.name, style: AppText.heading(size: 17))),
+              StatusChip(t.status),
+            ],
           ),
-        ),
-      ),
-      const SizedBox(width: 12),
-    ],
-    Expanded(child: Text(t.name, style: AppText.heading(size: 17))),
-    StatusChip(t.status),
-  ],
-),
           if (meta.isNotEmpty) ...[
             const SizedBox(height: 4),
             Text(meta, style: AppText.muted(size: 12)),

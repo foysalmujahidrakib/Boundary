@@ -44,12 +44,21 @@ service cloud.firestore {
         && request.resource.data.clubId == resource.data.clubId;
       allow delete: if isClubAdmin(resource.data.clubId);
     }
+    // A player must belong to a team in the same club.
+    function teamInClub(teamId, clubId) {
+      return teamId is string
+        && exists(/databases/$(database)/documents/teams/$(teamId))
+        && get(/databases/$(database)/documents/teams/$(teamId)).data.clubId == clubId;
+    }
     match /players/{playerId} {
       allow read: if isClubMember(resource.data.clubId);
       allow create: if isClubAdmin(request.resource.data.clubId)
-        && request.resource.data.fullName is string && request.resource.data.fullName.size() > 0;
+        && request.resource.data.fullName is string && request.resource.data.fullName.size() > 0
+        && teamInClub(request.resource.data.teamId, request.resource.data.clubId);
       allow update: if isClubAdmin(resource.data.clubId)
-        && request.resource.data.clubId == resource.data.clubId;
+        && request.resource.data.clubId == resource.data.clubId
+        && request.resource.data.fullName is string && request.resource.data.fullName.size() > 0
+        && teamInClub(request.resource.data.teamId, resource.data.clubId);
       allow delete: if isClubAdmin(resource.data.clubId);
     }
     match /tournaments/{tournamentId} {
@@ -121,7 +130,7 @@ service cloud.firestore {
         && request.resource.data.status in ['planned', 'ongoing', 'completed', 'cancelled']
         && request.resource.data.keys().hasOnly([
           'clubId', 'name', 'season', 'format', 'startDate', 'endDate',
-          'venue', 'status', 'logoUrl', 'teamIds', 'teamNames', 'updatedAt'
+          'venue', 'status', 'teamIds', 'teamNames', 'updatedAt'
         ]);
       allow update: if signedIn()
         && isClubAdmin(resource.data.clubId)
@@ -132,7 +141,7 @@ service cloud.firestore {
         && request.resource.data.status in ['planned', 'ongoing', 'completed', 'cancelled']
         && request.resource.data.keys().hasOnly([
           'clubId', 'name', 'season', 'format', 'startDate', 'endDate',
-          'venue', 'status', 'logoUrl', 'teamIds', 'teamNames', 'updatedAt'
+          'venue', 'status', 'teamIds', 'teamNames', 'updatedAt'
         ]);
       allow delete: if signedIn() && isClubAdmin(resource.data.clubId);
     }

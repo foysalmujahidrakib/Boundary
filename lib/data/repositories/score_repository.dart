@@ -160,7 +160,9 @@ class ScoreRepository {
       final results = await Future.wait([
         _db
             .collection(Collections.publicMatchScores)
-            .where('status', isEqualTo: PublicStatus.live)
+            // Restrict housekeeping to this club. Querying every live match
+            // becomes increasingly expensive as other clubs use the app.
+            .where('clubId', isEqualTo: clubId)
             .get(),
         _db
             .collection(Collections.matches)
@@ -179,6 +181,7 @@ class ScoreRepository {
         if (data['clubId'] != clubId) continue;
 
         final public = PublicMatchScore.fromMap(doc.id, data);
+        if (public.status != PublicStatus.live) continue;
         final linked =
             matchStatusById[public.matchId] ??
             PublicStatuses.normalize(public.matchStatus);

@@ -102,7 +102,6 @@ class TournamentRepository {
         endDate: t.endDate,
         venue: t.venue,
         status: t.status,
-        logoUrl: t.logoUrl,
         teamIds: t.teamIds,
         teamNames: {
           for (final teamId in t.teamIds)
@@ -117,6 +116,6 @@ class TournamentRepository {
     return _db.collection(Collections.publicTournaments).doc(id).set({
       ...data,
       'updatedAt': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+    });
   }
 }

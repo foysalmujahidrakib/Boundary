@@ -1,8 +1,3 @@
-import 'dart:typed_data';
-
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
-
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/ui.dart';
@@ -49,15 +44,6 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
   late final Set<String> _teamIds = {...?widget.initial?.teamIds};
   String? _error;
 
-  // Logo: the saved URL, plus a newly picked image that is uploaded on save.
-  late String _logoUrl = widget.initial?.logoUrl ?? '';
-  Uint8List? _newLogo;
-  bool _saving = false;
-
-  ImageProvider? get _logoImage => _newLogo != null
-      ? MemoryImage(_newLogo!)
-      : (_logoUrl.isNotEmpty ? NetworkImage(_logoUrl) : null);
-
   static String _orDefault(String? v, String fallback) =>
       (v == null || v.isEmpty) ? fallback : v;
 
@@ -69,20 +55,7 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
     super.dispose();
   }
 
-  Future<void> _pickLogo() async {
-    final file = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-      maxWidth: 512,
-      maxHeight: 512,
-      imageQuality: 85,
-    );
-    if (file == null) return;
-    final bytes = await file.readAsBytes();
-    if (!mounted) return;
-    setState(() => _newLogo = bytes);
-  }
-
-  Future<void> _save() async {
+  void _save() {
     setState(() => _error = null);
     if (!_formKey.currentState!.validate()) return;
 
@@ -104,32 +77,6 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
       return;
     }
 
-    setState(() => _saving = true);
-
-    // Upload the new logo (if any) and get its public URL.
-    var logoUrl = _logoUrl;
-    try {
-      if (_newLogo != null) {
-        final ref = FirebaseStorage.instance.ref(
-          'tournament-logos/${widget.clubId}/'
-          '${DateTime.now().millisecondsSinceEpoch}.jpg',
-        );
-        await ref.putData(
-          _newLogo!,
-          SettableMetadata(contentType: 'image/jpeg'),
-        );
-        logoUrl = await ref.getDownloadURL();
-      }
-    } catch (_) {
-      if (!mounted) return;
-      setState(() {
-        _saving = false;
-        _error = 'Logo upload failed. Please try again.';
-      });
-      return;
-    }
-    if (!mounted) return;
-
     Navigator.of(context).pop(
       Tournament(
         id: widget.initial?.id ?? '',
@@ -141,7 +88,6 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
         endDate: _end,
         venue: _venue.text.trim(),
         status: _status,
-        logoUrl: logoUrl,
         // Keep the club's team order so public tables are stable.
         teamIds: [
           for (final t in widget.teams)
@@ -161,38 +107,6 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundColor: AppColors.fill,
-                    backgroundImage: _logoImage,
-                    child: _logoImage == null
-                        ? const Icon(Icons.emoji_events_outlined)
-                        : null,
-                  ),
-                  TextButton.icon(
-                    onPressed: _saving ? null : _pickLogo,
-                    icon: const Icon(Icons.image_outlined),
-                    label: Text(
-                      _logoImage == null ? 'Add logo (optional)' : 'Change logo',
-                    ),
-                  ),
-                  if (_logoImage != null)
-                    TextButton(
-                      onPressed: _saving
-                          ? null
-                          : () => setState(() {
-                              _newLogo = null;
-                              _logoUrl = '';
-                            }),
-                      child: const Text('Remove logo'),
-                    ),
-                ],
-              ),
-            ),
-            const FieldGap(),
             TextFormField(
               controller: _name,
               autofocus: !editing,
@@ -291,12 +205,8 @@ class _TournamentFormSheetState extends State<TournamentFormSheet> {
             ],
             const SizedBox(height: 18),
             FilledButton(
-              onPressed: _saving ? null : _save,
-              child: Text(
-                _saving
-                    ? 'Saving…'
-                    : (editing ? 'Save changes →' : 'Create tournament →'),
-              ),
+              onPressed: _save,
+              child: Text(editing ? 'Save changes →' : 'Create tournament →'),
             ),
           ],
         ),

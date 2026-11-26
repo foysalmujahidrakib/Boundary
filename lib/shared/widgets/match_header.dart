@@ -12,20 +12,29 @@ class MatchHeader extends StatelessWidget {
     this.meta = '',
     this.result = '',
     this.live = false,
+    this.badgeTrailing, // in the constructor
   });
-
   final String badge;
   final bool live;
   final String title;
   final String meta;
   final String result;
+  final Widget? badgeTrailing;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ScoreBadge(badge, live: live),
+        Row(
+          children: [
+            ScoreBadge(badge, live: live),
+            if (badgeTrailing != null) ...[
+              const SizedBox(width: 10),
+              badgeTrailing!,
+            ],
+          ],
+        ),
         const SizedBox(height: 12),
         Text(
           title,
