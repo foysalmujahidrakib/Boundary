@@ -53,7 +53,7 @@ class _ViewerPresenceState extends State<ViewerPresence>
   void _start() {
     _beat();
     _timer?.cancel();
-    _timer = Timer.periodic(const Duration(seconds: 30), (_) => _beat());
+    _timer = Timer.periodic(const Duration(seconds: 15), (_) => _beat());
   }
 
   void _stop() {
@@ -100,7 +100,7 @@ class _LiveViewerCountState extends State<LiveViewerCount> {
   void initState() {
     super.initState();
     _load();
-    _timer = Timer.periodic(const Duration(seconds: 15), (_) => _load());
+    _timer = Timer.periodic(const Duration(seconds: 10), (_) => _load());
   }
 
   Future<void> _load() async {

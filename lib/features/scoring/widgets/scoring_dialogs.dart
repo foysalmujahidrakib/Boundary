@@ -181,12 +181,13 @@ class _WicketDialogState extends State<_WicketDialog> {
 
 /// The numbers a scorer is asked for per extra type.
 class _ExtraPrompt {
-  const _ExtraPrompt(this.title, this.hint, this.initial, this.min);
+  const _ExtraPrompt(this.title, this.hint, this.initial, this.min, this.max);
 
   final String title;
   final String hint;
   final int initial;
   final int min;
+  final int max;
 }
 
 const _prompts = <String, _ExtraPrompt>{
@@ -195,20 +196,23 @@ const _prompts = <String, _ExtraPrompt>{
     'Extra runs run, in addition to the 1 run for the wide.',
     0,
     0,
+    100,
   ),
   DeliveryKind.noBall: _ExtraPrompt(
     'No ball',
     'Runs scored off the bat (the no-ball adds 1 more).',
     0,
-    1,
+    0,
+    6,
   ),
-  DeliveryKind.bye: _ExtraPrompt('Byes', 'Byes run.', 1, 1),
-  DeliveryKind.legBye: _ExtraPrompt('Leg byes', 'Leg byes run.', 1, 1),
+  DeliveryKind.bye: _ExtraPrompt('Byes', 'Byes run.', 1, 1, 100),
+  DeliveryKind.legBye: _ExtraPrompt('Leg byes', 'Leg byes run.', 1, 1, 100),
   DeliveryKind.penalty: _ExtraPrompt(
     'Penalty runs',
     'Penalty runs awarded.',
     5,
     1,
+    100,
   ),
 };
 
@@ -246,9 +250,12 @@ class _ExtrasDialogState extends State<_ExtrasDialog> {
 
   void _confirm() {
     final value = int.tryParse(_controller.text.trim());
-    if (value == null || value < widget.prompt.min || value > 100) {
+    if (value == null ||
+        value < widget.prompt.min ||
+        value > widget.prompt.max) {
       setState(
-        () => _error = 'Enter a whole number from ${widget.prompt.min} to 100.',
+        () => _error =
+            'Enter a whole number from ${widget.prompt.min} to ${widget.prompt.max}.',
       );
       return;
     }
